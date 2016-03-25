@@ -1,0 +1,16 @@
+# -*- coding: utf-8 -*-
+"""
+@author: jfelipe
+"""
+from MRCountWords import MRCountWords
+
+list_counts = []   
+mr_job = MRCountWords(args=['-r', 'inline', '--no-conf', '-'])
+with mr_job.make_runner() as runner:
+    runner.run()
+    for line in runner.stream_output():
+	print(mr_job.parse_output_line(line)[0])
+        list_counts.append(mr_job.parse_output_line(line)[1])
+        
+list_counts.sort(reverse=True)
+print list_counts[:10]    

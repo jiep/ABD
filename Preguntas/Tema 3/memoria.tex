@@ -1,0 +1,72 @@
+\documentclass[12pt,a4paper,twoside,openright,titlepage,final]{article}
+\usepackage{fontspec}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage[hidelinks,unicode=true]{hyperref}
+\usepackage[spanish,es-nodecimaldot,es-lcroman,es-tabla,es-noshorthands]{babel}
+\usepackage[left=3cm,right=2cm, bottom=4cm]{geometry}
+\usepackage{natbib}
+\usepackage{microtype}
+\usepackage{ifdraft}
+\usepackage{verbatim}
+\usepackage[nottoc]{tocbibind}
+\usepackage{pdflscape}
+\usepackage{fancyvrb}
+\usepackage[obeyDraft]{todonotes}
+\ifdraft{
+	\usepackage{draftwatermark}
+	\SetWatermarkText{BORRADOR}
+	\SetWatermarkScale{0.7}
+	\SetWatermarkColor{red}
+}{}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{calc}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{subfigure}
+\usepackage{footnote}
+\usepackage{url}
+\usepackage[titletoc]{appendix}
+
+\setsansfont[Ligatures=TeX]{texgyreadventor}
+\setmainfont[Ligatures=TeX]{texgyrepagella}
+\setmonofont{FreeMono}
+
+\usetikzlibrary{decorations.pathreplacing}
+
+\input{portada}
+
+\author{José Ignacio Escribano}
+
+\title{}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\pagenumbering{alph}
+\setcounter{page}{1}
+
+\portada{Foro de preguntas}{Análisis de Big Data}{Preguntas Tema 3}{José Ignacio Escribano}{Móstoles}
+
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+
+\section{Preguntas}
+
+\subsection{Microsoft se ha convertido recientemente en otro de los principales proveedores de servicios cloud públicos. Busque información sobre dichos servicios  e indique cuál es la plataforma principal que ofrece Microsoft Azure para análisis de Big Data, resumiendo brevemente sus principales funciones.}
+
+
+
+\subsection{¿Qué tipo de servicios de virtualización y cloud computing podemos implementar con OpenStack, públicos o privados? ¿Ofrece OpenStack algún tipo de soporte para asignación dinámica de recursos computacionales dentro del cloud?}
+
+
+\end{document} 

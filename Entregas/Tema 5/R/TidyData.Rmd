@@ -150,7 +150,8 @@ cat("El primer cuartil es", quantile(data_value, 0.25)[[1]],
 Representamos los datos de la variable `data_value` como un histograma.
 
 ```{r}
-title_hist = "Concentración media de particulas de benceno\n en la ciudad de Nueva York"
+title_hist = "Concentración media de particulas de benceno
+  en la ciudad de Nueva York"
 ylabel_hist = "Frecuencia"
 xlabel_hist = ""
 hist(data_value, 

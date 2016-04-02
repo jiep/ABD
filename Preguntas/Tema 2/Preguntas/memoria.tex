@@ -64,7 +64,7 @@
 
 \subsection{¿Cuál es el resultado de la ejecución del segundo ejemplo proporcionado en el Tema 2, llamado top10\_words.py?¿Qué tareas realiza exactamente este archivo? ¿Por qué la lectura de la salida de un proceso con mrjob se debe poner en un archivo diferente (top10\_words.py) de aquel en que declaramos la clase principal de la tarea (MRCountWords.py)?}
 
-La salida del script ``top10\_words.py'' pasarle como parámetro el fichero ``shakespeare.txt'' es la siguiente:
+La salida del script ``top10\_words.py'' tras pasarle como parámetro el fichero ``shakespeare.txt'' es la siguiente:
 
 \begin{verbatim}
 [[27801, 'the'], [26834, 'and'], [20296, 'i'], [19748, 'to'], 
@@ -81,7 +81,7 @@ Este archivo instancia un objeto de la clase MRCountWords, que es a su vez un mr
 No se puede tener la lectura de la salida de un proceso mrjob y la clase principal de la tarea, ya que el archivo con la clase tarea se envía a Hadoop para que corra. Por lo tanto, el archivo con la tarea no puede intentar iniciar el job de Hadoop, ya que estaría creando jobs de Hadoop de forma recursiva[1].
 
 Fuente:
-[1]: http://pythonhosted.org/mrjob/guides/runners.html\#why-not-runner-in-file
+[1] http://pythonhosted.org/mrjob/guides/runners.html\#why-not-runner-in-file
 
 \subsection{Las dos fases principales en cualquier tarea MapReduce son map y reduce. Sin embargo, también se puede añadir un nuevo tipo de fase llamada combine. Busque información sobre este tipo de fase y explique con un ejemplo qué ventajas proporciona cuando se añade a ciertos procesos MapReduce.}
 
@@ -94,7 +94,6 @@ Consideremos el ejemplo de contar palabras de un texto. Si no usáramos la fase 
 (palabra 1, 1)\\
 (palabra 2, 1)\\
 ...\\
-
 
 Si tuviéramos un archivo muy grande, las tuplas con las palabras más frecuentes se enviarían a la fase reduce muchísimas veces.\\
 

@@ -4,18 +4,19 @@ author: "José Ignacio Escribano"
 date: "10 de abril de 2016"
 fontsize: 12pt
 lang: spanish
+documentclass: article
 output: 
   pdf_document:
-    latex_engine: xelatex
     toc: true
     number_sections: true
+    fig_caption: yes
 ---
 
-# Introducción
+# Carga de los datos
 
 En primer lugar, cargamos los paquetes necesarios para limpiar los datos.
 
-```{r include = FALSE}
+```{r message = FALSE, warning = FALSE}
 library("dplyr")
 library("tidyr")
 ```
@@ -27,10 +28,12 @@ Error in library(dplyr) : there is no package called ‘dplyr’
 Error in library(dplyr) : there is no package called ‘tidyr’
 ```
 
-debemos ejecutar el siguiente comando, que instalará los paquetes anteriores
+debemos ejecutar el siguiente comando, que instalará los paquetes anteriores desde el repositorio http://cran.rstudio.com.
 
-```
-install.packages(c("dplyr", "tidyr"))
+```{r message = FALSE, warning=FALSE}
+# Repositorio desde el que descargar los paquetes
+repository = "http://cran.rstudio.com" 
+install.packages(c("dplyr", "tidyr"), repos = repository)
 ```
 
 Una vez instalados los paquetes, volvemos a ejecutar los comandos anteriores.
@@ -80,11 +83,23 @@ tidy_data = select(renamed_columns, -indicator_id)
 
 Nuestro nuevo conjunto de datos tiene el siguiente aspecto:
 
-```{r}
-head(tidy_data)
+```{r results = "asis", message = FALSE}
+# Sólo es necesario para mostrar el resultado de la función 
+# `head` como tabla en R Markdown
+
+# Si no está el paquete pander, lo descargamos
+if (!require("pander")) 
+  install.packages("pander", repos = repository)
+
+# Cargamos el paquete pander
+library("pander")
+
+head_data = head(tidy_data)
+
+pander(head_data, caption = "Subconjunto de los datos tras ser limpiados")
 ```
 
-Comprobamos el tamaño de este nuevo conunto de datos: 
+Comprobamos el tamaño de este nuevo conjunto de datos: 
 
 ```{r} 
 dim(tidy_data)
@@ -129,8 +144,19 @@ cat("El número de índices iguales es", equal_index)
 
 Esto nos devuelve 192 (48*4) índices que concuerdan (todos los valores son iguales posición a posición), por lo que ambos resultados son idénticos.
 
+Otra forma más directa de comprobarlo es usar la función `identical`.
 
-# Ejercicio 1
+```{r}
+if(identical(tidy_data,tidy_data2)){
+  cat("Los datos son idénticos")
+}else{
+  cat("Los datos no son idénticos")
+}
+
+```
+
+
+# Estadísticos básicos
 
 Obtenemos algunas medidas estadísticas para la columna `data_value`.
 
@@ -145,12 +171,23 @@ cat("El primer cuartil es", quantile(data_value, 0.25)[[1]],
     "y el tercer cuartil es", quantile(data_value, 0.75)[[1]])
 ``` 
 
-# Ejercicio 2
+Otra forma de obtener estos indicadores es usar la función `summary`.
+
+```{r results = "asis"}
+# La función `pander` sólo es necesaria para mostrar el resultado de 
+# la función `summary` como tabla en R Markdown
+
+summary = summary(data_value)
+pander(summary, caption = "Estadísticos básicos de la variable")
+```
+
+
+# Histograma
 
 Representamos los datos de la variable `data_value` como un histograma.
 
-```{r}
-title_hist = "Concentración media de particulas de benceno
+```{r, fig.cap="Histograma de la concentración de partículas de benceno en NYC"}
+title_hist = "Concentración media de partículas de benceno
   en la ciudad de Nueva York"
 ylabel_hist = "Frecuencia"
 xlabel_hist = ""
@@ -158,14 +195,36 @@ hist(data_value,
      main = title_hist, 
      xlab = xlabel_hist, 
      ylab = ylabel_hist,
-     col = "blue")
+     col = "lightblue")
 ```
 
-# Ejercicio 3
+Otra forma de obtener un histograma es usar el paquete `ggplot2`.
+
+```{r, message = FALSE, fig.cap="Histograma de la concentración de partículas de benceno en NYC con el paquete `ggplot2`"}
+# Si no está el paquete `ggplot2`, lo instalamos
+if (!require("ggplot2")) 
+  install.packages("ggplot2", repos = repository)
+
+# Cargamos el paquete ggplot2
+library("ggplot2")
+
+ggplot() +  aes(data_value) + 
+  geom_histogram(col = "blue", 
+                 fill = "lightblue", 
+                 binwidth = 0.5,
+                 alpha = I(0.2)) + 
+  ggtitle(title_hist) +
+    labs(x = xlabel_hist, 
+         y = ylabel_hist)
+```
+
+Observamos que dependiendo el número de grupos, varía el histograma que se muestra.
+
+# Función de densidad y de probabilidad
 
 Dibujamos la función de densidad  y de distribución de la variable `data_value`.
 
-```{r}
+```{r, fig.cap="Funciones de densidad y de probabilidad de la concentración de partículas de benceno en NYC"}
 
 # Dividimos la pantalla en dos
 par(mfrow=c(1,2))
@@ -190,3 +249,47 @@ plot(ecdf(data_value),
      ylab = ylabel_cdf)
 
 ```
+
+Otra forma de hacerlo, es usando el paquete `ggplot2`.
+
+```{r, message = FALSE, fig.cap="Funciones de densidad y de probabilidad de la concentración de partículas de benceno en NYC con el paquete `ggplot2`"}
+# Dividimos la pantalla en dos
+# Para ello, usamos el paquete `gridExtra`.
+
+# Si no está el paquete `gridExtra`, lo instalamos
+if (!require("gridExtra")) 
+  install.packages("gridExtra", repos = repository)
+
+# Cargamos el paquete `gridExtra`
+require(gridExtra)
+
+# Guardamos el plot de la función de densidad en una variable
+density = ggplot() + aes(data_value) + 
+  geom_density(col = "blue", 
+               fill = "lightblue", 
+               alpha = 0.2) +
+   ggtitle(title_density) +
+    labs(x = xlabel_density, 
+         y = ylabel_density)
+
+# Guardamos el plot de la función de probabilidad en una variable
+probability = ggplot(main = title_density) + 
+  aes(data_value) + stat_ecdf(col = "blue") + 
+    ggtitle(title_cdf) + 
+      labs(x = xlabel_cdf, 
+           y = ylabel_cdf)  
+
+
+# Mostramos cada plot en dos columnas
+grid.arrange(density, probability, ncol=2)
+
+
+```
+
+Tanto los estadísticos descriptivos (media, desviación típica, mediana, etc) como los gráficos (histograma y función de densidad) nos dan mucha información de la concentración de benceno en la ciudad de Nueva York.
+
+Sabemos que el mínimo de concentración es 1.10 y el máximo es 6.30. La media y la mediana son muy parecidas (2.91 y 2.80 respectivamente), lo que indica que estas medidas son representativas como estadístico de centralidad de la muestra de benceno.
+
+El rango intercuartílico se sitúa entre 1.75 y 3.70, es decir, que el 50% (eliminando un 25% de los valores más bajos y otro 25% de los más altos) de las veces la concentración de benceno en Nueva York estuvo entre 1.75 y 3.70.
+
+Echando un vistazo a la función de densidad o al histograma, observamos que la moda se sitúa en torno a 2.25. Además, se observa que la densidad crece de forma muy rápida hasta la moda, para reducirse a medida que aumenta la concentración de benceno. En torno a los valores de 3.75 y 4.50, la densidad de la concentración de benceno se mantiene casi constante, con un leve descenso.

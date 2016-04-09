@@ -1,0 +1,81 @@
+\documentclass[12pt,a4paper,twoside,openright,titlepage,final]{article}
+\usepackage{fontspec}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage[hidelinks,unicode=true]{hyperref}
+\usepackage[spanish,es-nodecimaldot,es-lcroman,es-tabla,es-noshorthands]{babel}
+\usepackage[left=3cm,right=2cm, bottom=4cm]{geometry}
+\usepackage{natbib}
+\usepackage{microtype}
+\usepackage{ifdraft}
+\usepackage{verbatim}
+\usepackage[nottoc]{tocbibind}
+\usepackage{pdflscape}
+\usepackage{fancyvrb}
+\usepackage[obeyDraft]{todonotes}
+\ifdraft{
+	\usepackage{draftwatermark}
+	\SetWatermarkText{BORRADOR}
+	\SetWatermarkScale{0.7}
+	\SetWatermarkColor{red}
+}{}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{calc}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{subfigure}
+\usepackage{footnote}
+\usepackage{url}
+\usepackage[titletoc]{appendix}
+
+\setsansfont[Ligatures=TeX]{texgyreadventor}
+\setmainfont[Ligatures=TeX]{texgyrepagella}
+\setmonofont{FreeMono}
+
+\usetikzlibrary{decorations.pathreplacing}
+
+\input{portada}
+
+\author{José Ignacio Escribano}
+
+\title{}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\pagenumbering{alph}
+\setcounter{page}{1}
+
+\portada{Foro de preguntas}{Análisis de Big Data}{Preguntas Temas 8 y 9}{José Ignacio Escribano}{Móstoles}
+
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+
+\section{Preguntas}
+
+\subsection{Hasta hace muy poco tiempo, la única opción para análisis de grafos escalable en Spark era la utilización de GraphX, cuyo catálogo completo de funciones y operaciones solo es accesible usando el lenguaje de programación Scala. Sin embargo, un nuevo elemento en Spark desde su versión 1.6 permite también acceder a estas funciones por primera vez con el lenguaje Python. Busque información al respecto e indique cómo se llama la abstracción que permite esta mejora y qué funciones ofrece.}
+
+
+
+Fuentes:\\
+\begin{verbatim}
+[1] 
+\end{verbatim}
+
+\subsection{La API Spark SQL dentro del framework para big data Spark proporciona una abstracción de datos llamada DataFrames: http://spark.apache.org/docs/latest/sql-programming-guide.html ¿En qué otros lenguajes de programación piensa que se ha podido inspirar esta abstracción de datos? ¿Cuáles son las principales funciones que ofrecen los DataFrames?}
+
+Fuentes:\\
+\begin{verbatim}
+[1]
+\end{verbatim}
+
+\end{document} 

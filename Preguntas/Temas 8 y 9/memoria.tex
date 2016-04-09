@@ -64,18 +64,117 @@
 
 \subsection{Hasta hace muy poco tiempo, la única opción para análisis de grafos escalable en Spark era la utilización de GraphX, cuyo catálogo completo de funciones y operaciones solo es accesible usando el lenguaje de programación Scala. Sin embargo, un nuevo elemento en Spark desde su versión 1.6 permite también acceder a estas funciones por primera vez con el lenguaje Python. Busque información al respecto e indique cómo se llama la abstracción que permite esta mejora y qué funciones ofrece.}
 
+GraphFrames [1] es la abstracción que permite el manejo de grafos, de forma similar a cómo lo hace GraphX. GraphFrames se encuentra construido en la cima de Spark DataFrames, que hace que tenga las siguientes ventajas:
 
+\begin{itemize}
+	\item GraphFrames provee de APIs uniformes para Pyhton, Java y Scala. Por primera vez todos los algoritmos de GraphX están dsiponibles para Python y Java.
+	\item GraphFrames permite usar las APIs de Spark SQL y DataFrames para hacer consultas.
+	\item GraphFrames tiene total soporte de las mismas fuentes de datos que DataFrames, lo que permite leer y escribir grafos usando formatos como Parquet, JSON o CSV.
+\end{itemize}
 
+En GraphFrames, los vértices y aristas del grafo son representados como DataFrames, permitiendo almacenar información arbitraria tanto en vértices como en aristas.\\
+
+Las principales funciones de la clase GraphFrame son:
+
+\begin{itemize}
+	\item bfs: búsqueda en amplitud del grafo.
+	\item connectedComponents: calcula las componentes conexas del grafo.
+	\item degrees: calcula el grado de cada vértice del grafo.
+	\item pageRank: calcula el pageRank del grafo.
+	\item shortestPaths: calcula los caminos más cortos de un conjunto de vértices del grafo.
+	\item stronglyConnectedComponents: calcula las componentes fuertemente conexas del grafo.
+	\item triangleCount: cuenta el número de triángulos del grafo.
+\end{itemize}
 Fuentes:\\
 \begin{verbatim}
-[1] 
+[1] http://graphframes.github.io/
+[2] http://graphframes.github.io/api/python/graphframes.html
+[3] https://databricks.com/blog/2016/03/03/introducing-graphframes.html
 \end{verbatim}
 
 \subsection{La API Spark SQL dentro del framework para big data Spark proporciona una abstracción de datos llamada DataFrames: http://spark.apache.org/docs/latest/sql-programming-guide.html ¿En qué otros lenguajes de programación piensa que se ha podido inspirar esta abstracción de datos? ¿Cuáles son las principales funciones que ofrecen los DataFrames?}
 
+Un DataFrame es una colección de datos organizados por columnas con nombre. Son equivalentes a una tabla en una base de datos relacional o a un data frame de R o Pyhton, aunque con una mayor optimización que en estos dos lenguajes. Por lo que los DataFrames están inspirados en los homólogos de estos dos lenguajes.\\
+
+Los DataFrames pueden ser creados a partir de distintas fuentes de datos como como archivos de datos estructurados, tablas en Apache Hive, bases de datos externas, o RDDs existentes.\\
+
+La API de DataFrames se encuentra disponible para los lenguajes Scala, Java, Python y R.\\
+
+Las principales características de los DataFrames son:
+
+\begin{itemize}
+	\item Escalado desde kilobytes hasta petabytes.
+	\item Soporte para sistemas de almacenamiento y formatos de datos de array ancho.
+	\item Optimización y generación de código a través del optimizador SparkSQL Catalyst. 
+\end{itemize} 
+
+Las principales funciones de la clase DataFrame (en Pyhton) son:
+
+\begin{itemize}
+	
+	\item show: muestra el dataframe en pantalla. Ejemplo:
+	
+	\begin{verbatim}
+	# Importamos la librería de Spark
+	from pyspark.sql import SQLContext
+	
+	# df es un dataframe
+	df.show()
+	\end{verbatim}
+	
+	\item printSchema: imprime el esquema de un dataframe. Ejemplo:
+	
+	\begin{verbatim}
+	df.printSchema()
+	\end{verbatim}
+	
+	\item select: selecciona una columna
+	
+	\begin{verbatim}
+		# Selecciona la columna name y la imoprime en pantalla
+		df.select("name").show()
+		
+		# Selecciona la columna name, y a la variable age le suma 1.
+		df.select(df["name"], df["age"]+1).show()
+	\end{verbatim}
+	
+	\item filter: filtra información de un dataframe.
+	
+	\begin{verbatim}
+		# Filtra los valores de la columna age que sean mayores de 21, y los muestra por pantalla.
+		df.filter(df["age"] > 21)
+	\end{verbatim}
+	
+	\item goupBy: agrupa por columna.
+	
+	\begin{verbatim}
+		# Agrupa por la columna age, que cuenta y muestra por pantalla
+		df.groupBy("age").count().show()
+	\end{verbatim}
+\end{itemize}
+
+La lista completa se puede encontrar en [4].\\
+
+La creación de un dataframe se consigue utilizando distintas funciones de la clase SQLContext. Por ejemplo, para leer desde un JSON, usamos el siguiente código.
+
+\begin{verbatim}
+# Creamos un SQLContext
+sqlContext = SQLContext(sc)
+
+# Crea el dataframe del archivo "people.json"
+df = sqlContext.read.json("people.json")
+\end{verbatim}
+
+La lista completa de todos los formatos disponibles se pueden encontrar en [5].
+
+
 Fuentes:\\
 \begin{verbatim}
-[1]
+[1] http://spark.apache.org/docs/latest/sql-programming-guide.html
+[2] https://databricks.com/blog/2015/02/17/introducing-dataframes-in-spark-for-large-scale-data-science.html
+[3] https://databricks.com/blog/2015/06/02/statistical-and-mathematical-functions-with-dataframes-in-spark.html
+[4] http://spark.apache.org/docs/latest/api/python/pyspark.sql.html#pyspark.sql.DataFrame
+[5] http://spark.apache.org/docs/latest/api/python/pyspark.sql.html#pyspark.sql.SQLContext
 \end{verbatim}
 
 \end{document} 

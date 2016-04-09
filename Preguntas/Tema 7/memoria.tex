@@ -62,20 +62,71 @@
 
 \section{Preguntas}
 
-\subsection{A pesar de su nombre, tomado del villano de la saga Harry Potter, Voldemort es una conocida base de datos NoSQL. Responda a estas preguntas: ¿En qué empresa surgió? ¿En cual de las cuatro familiar NoSQL presentadas en teoría se puede encuadrar? ¿Cuáles son sus principales ventajas e inconvenientes?}
+\subsection{A pesar de su nombre, tomado del villano de la saga Harry Potter, Voldemort es una conocida base de datos NoSQL. Responda a estas preguntas: ¿En qué empresa surgió? ¿En cuál de las cuatro familiar NoSQL presentadas en teoría se puede encuadrar? ¿Cuáles son sus principales ventajas e inconvenientes?}
 
+Voldemort es una base de datos NoSQL clave-valor, usada en LinkedIn, en numerosos sistemas críticos[1]. Sus principales características son:
+
+\begin{itemize}
+	\item Replicación de datos automática en múltiples servidores.
+	\item Particionado de datos automático en múltiples servidores.
+	\item Fallos en el servidor de forma transparente.
+	\item Los datos son versionados para maximizar la integridad en caso de fallo, sin comprometer la disponibilidad del sistema.
+	\item Cada nodo es independiente de los demás.
+\end{itemize}
+
+Voldemort no es una base de datos relacional, ni intenta satisfacer relaciones arbitrarias, ni propiedades ACID. Es básicamente una gran tabla hash distribuida, persistente y tolerante a fallos.\\
+
+Las principales ventajas de Voldemort son:
+
+\begin{itemize}
+	\item Escalado horizontal
+	\item Disponibilidad de información
+	\item Código abierto
+	\item Manejo de gran cantidad de información
+	\item Evita cuellos de botella
+\end{itemize}
+
+Entre sus desventajas se encuentran:
+
+\begin{itemize}
+	\item No cumple las reglas ACID.
+	\item Poco utilizada [6].
+\end{itemize}
 
 
 Fuentes:\\
 \begin{verbatim}
-[1] 
+[1] http://www.project-voldemort.com/
+[2] http://static.usenix.org/events/fast/tech/full_papers/Sumbaly.pdf
+[3] https://en.wikipedia.org/wiki/Voldemort_(distributed_data_store)
+[4] http://emanuelpeg.blogspot.com.es/2011/10/voldemort-una-base-de-datos-nosql-con.html
+[5] https://www.usenix.org/legacy/publications/login/2011-10/openpdfs/Burd.pdf
+[6] http://db-engines.com/en/ranking
 \end{verbatim}
 
 \subsection{Busque información sobre la primera base de datos (por fecha de lanzamiento) con arquitectura clave-valor de la familia NoSQL. ¿Dónde surgió, en una empresa o como proyecto de software libre? ¿Qué factores o necesidades determinaron su aparición?}
 
+La primera base de datos fue dbm, acrónimo de DataBase Manager, lanzada en 1979 por AT\&T y escrita por Ken Thompson. Propiamente no se trata de una base de datos sino de una librería.\\
+
+dbm almacena datos arbitrarios mediante el uso de una clave única en buckets de longitud fija y utiliza técnicas de hashing para permitir una fácil recuperación de los datos por clave.\\
+
+dbm surgió de la necesidad de crear y manipular una hashed database.\\
+
+A partir de dbm surgieron varios sucesores:
+
+\begin{itemize}
+	\item Ndbm: Berkeley introdujo en 1986 Ndbm (New DataBase Manager). Añadía soporte para múltiples bases de datos abiertas concurrentemente.
+	\item GDBM (GNU dbm): versión libre escrita por Philip A. Nelson del proyecto GNU. Añadía soporte para datos de longitud arbitraria en la base de datos.
+	\item tdbm: versión de ndbm con transacciones atómicas, bases de datos en memoria. Licencia BSD.  
+\end{itemize}
+
 Fuentes:\\
 \begin{verbatim}
-[1]
+[1] http://blog.knuthaugen.no/2010/03/a-brief-history-of-nosql.html
+[2] https://www.quora.com/Which-is-the-first-NoSQL-database
+[3] https://en.wikipedia.org/wiki/Dbm
+[4] https://en.wikipedia.org/wiki/Ndbm
+[5] http://www.gnu.org.ua/software/gdbm/
 \end{verbatim}
 
 \end{document} 

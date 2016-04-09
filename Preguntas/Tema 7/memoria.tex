@@ -1,0 +1,81 @@
+\documentclass[12pt,a4paper,twoside,openright,titlepage,final]{article}
+\usepackage{fontspec}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage[hidelinks,unicode=true]{hyperref}
+\usepackage[spanish,es-nodecimaldot,es-lcroman,es-tabla,es-noshorthands]{babel}
+\usepackage[left=3cm,right=2cm, bottom=4cm]{geometry}
+\usepackage{natbib}
+\usepackage{microtype}
+\usepackage{ifdraft}
+\usepackage{verbatim}
+\usepackage[nottoc]{tocbibind}
+\usepackage{pdflscape}
+\usepackage{fancyvrb}
+\usepackage[obeyDraft]{todonotes}
+\ifdraft{
+	\usepackage{draftwatermark}
+	\SetWatermarkText{BORRADOR}
+	\SetWatermarkScale{0.7}
+	\SetWatermarkColor{red}
+}{}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{calc}
+\usepackage{array}
+\usepackage{caption}
+\usepackage{subfigure}
+\usepackage{footnote}
+\usepackage{url}
+\usepackage[titletoc]{appendix}
+
+\setsansfont[Ligatures=TeX]{texgyreadventor}
+\setmainfont[Ligatures=TeX]{texgyrepagella}
+\setmonofont{FreeMono}
+
+\usetikzlibrary{decorations.pathreplacing}
+
+\input{portada}
+
+\author{José Ignacio Escribano}
+
+\title{}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+\pagenumbering{alph}
+\setcounter{page}{1}
+
+\portada{Foro de preguntas}{Análisis de Big Data}{Preguntas Tema 7}{José Ignacio Escribano}{Móstoles}
+
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+
+\section{Preguntas}
+
+\subsection{A pesar de su nombre, tomado del villano de la saga Harry Potter, Voldemort es una conocida base de datos NoSQL. Responda a estas preguntas: ¿En qué empresa surgió? ¿En cual de las cuatro familiar NoSQL presentadas en teoría se puede encuadrar? ¿Cuáles son sus principales ventajas e inconvenientes?}
+
+
+
+Fuentes:\\
+\begin{verbatim}
+[1] 
+\end{verbatim}
+
+\subsection{Busque información sobre la primera base de datos (por fecha de lanzamiento) con arquitectura clave-valor de la familia NoSQL. ¿Dónde surgió, en una empresa o como proyecto de software libre? ¿Qué factores o necesidades determinaron su aparición?}
+
+Fuentes:\\
+\begin{verbatim}
+[1]
+\end{verbatim}
+
+\end{document} 

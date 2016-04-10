@@ -161,128 +161,27 @@ df.show(10)
 
 El comando devuelve la Tabla~\ref{tbl:head}.\\
 
-\begin{longtable}[]{@{}lllllllllll@{}}
-	%\label{tbl:head}
-	%\caption{10 primeras filas del fichero}\\
-	\toprule
-	\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-		AccountId
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-		Age
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-		\begin{verbatim}
-		CreationDate
-		\end{verbatim}
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-		DisplayName
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-		DownVotes
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.02\columnwidth}\raggedright\strut
-		Id
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-		\begin{verbatim}
-		LastAccessDate
-		\end{verbatim}
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-		\begin{verbatim}
-		Location
-		\end{verbatim}
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-		Reputation
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-		UpVotes
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-		Views
-		\strut\end{minipage}\tabularnewline
-	\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-		\begin{verbatim}
-		-1
-		2
-		7598
-		1998
-		\end{verbatim}
-		
-		29738 32917 33603 51549 3874 15651
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-		null 38 30 29 null 30 30 38 48 42
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-		2011-01-11T19:19:\ldots{} 2011-01-11T19:50:\ldots{}
-		2011-01-11T19:55:\ldots{} 2011-01-11T20:17:\ldots{}
-		2011-01-11T20:18:\ldots{} 2011-01-11T20:29:\ldots{}
-		2011-01-11T20:37:\ldots{} 2011-01-11T20:37:\ldots{}
-		2011-01-11T20:38:\ldots{} 2011-01-11T20:38:\ldots{}
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-		\begin{verbatim}
-		Community
-		\end{verbatim}
-		
-		Geoff Dalgas Nick Craver Emmett Kevin Montrose David Fullerton Sorantis
-		GAThrawn Rodger Cooley MatthewMartin
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-		\begin{verbatim}
-		3953
-		0
-		0
-		0
-		0
-		4
-		0
-		0
-		3
-		2
-		\end{verbatim}
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.02\columnwidth}\raggedright\strut
-		-1 2 3 4 5 6 7 8 9 10
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-		2011-01-11T19:19:\ldots{} 2015-02-05T00:03:\ldots{}
-		2015-03-01T13:49:\ldots{} 2013-05-06T20:52:\ldots{}
-		2015-02-15T05:27:\ldots{} 2015-03-06T22:57:\ldots{}
-		2014-07-23T12:00:\ldots{} 2015-02-18T23:17:\ldots{}
-		2015-03-04T19:47:\ldots{} 2015-03-06T01:30:\ldots{}
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-		on the server farm Corvallis, OR Winston-Salem, NC San Francisco, CA New
-		York City, Ne\ldots{} New York, NY Sweden United Kingdom Houston, TX
-		United States
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-		\begin{verbatim}
-		1
-		101
-		101
-		101
-		101
-		99
-		146
-		103
-		1816
-		1787
-		\end{verbatim}
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-		2587 1 3 0 32 63 5 19 211 78
-		\strut\end{minipage} &
-	\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-		0 21 10 7 11 13 15 98 85 48
-		\strut\end{minipage}\tabularnewline
-	\bottomrule
-\end{longtable}
+\begin{table}[htbp!]
+	\centering
+	\caption{Primeras líneas del fichero \texttt{users.xml}}
+	\label{tbl:head}
+	\resizebox{\textwidth}{!}{%
+		\begin{tabular}{@{}ccccccccccc@{}}
+			\toprule
+			\textbf{AccountId} & \textbf{Age} & \textbf{CreationDate} & \textbf{DisplayName} & \textbf{DownVotes} & \textbf{Id} & \textbf{LastAccessDate} & \textbf{Location}    & \textbf{Reputation} & \textbf{UpVotes} & \textbf{Views} \\ \midrule
+			-1                 & null         & 2011-01-11T19:19:...  & Community            & 3953               & -1          & 2011-01-11T19:19:...    & on the server farm   & 1                   & 2587             & 0              \\
+			2                  & 38           & 2011-01-11T19:50:...  & Geoff Dalgas         & 0                  & 2           & 2015-02-05T00:03:...    & Corvallis, OR        & 101                 & 1                & 21             \\
+			7598               & 30           & 2011-01-11T19:55:..   & Nick Craver          & 0                  & 3           & 2015-03-01T13:49:...    & Winston-Salem, NC    & 101                 & 3                & 10             \\
+			1998               & 29           & 2011-01-11T20:17:...  & Emmett               & 0                  & 4           & 2013-05-06T20:52:...    & San Francisco, CA    & 101                 & 0                & 7              \\
+			29738              & null         & 2011-01-11T20:18:...  & Kevin Montrose       & 0                  & 5           & 2015-02-15T05:27:...    & New York City, Ne... & 101                 & 32               & 11             \\
+			32917              & 30           & 2011-01-11T20:29:...  & David Fullerton      & 4                  & 6           & 2015-03-06T22:57:...    & New York, NY         & 99                  & 63               & 13             \\
+			33603              & 30           & 2011-01-11T20:37:...  & Sorantis             & 0                  & 7           & 2014-07-23T12:00:...    & Sweden               & 146                 & 5                & 15             \\
+			51549              & 38           & 2011-01-11T20:37:...  & GAThrawn             & 0                  & 8           & 2015-02-18T23:17:...    & United Kingdom       & 103                 & 19               & 98             \\
+			3874               & 48           & 2011-01-11T20:38:...  & Rodger Cooley        & 3                  & 9           & 2015-03-04T19:47:...    & Houston, TX          & 1816                & 211              & 85             \\
+			15651              & 42           & 2011-01-11T20:38:...  & MatthewMartin        & 2            & 10          & 2015-03-06T01:30:...    & United States        & 1787                & 78               & 48             \\ \bottomrule
+		\end{tabular}%
+	}
+\end{table}
 
 \section{Ejercicio 2}
 A continuación, resolveremos una serie de consultas sobre el fichero XML.
@@ -309,91 +208,20 @@ A continuación, resolveremos una serie de consultas sobre el fichero XML.
 	
 	La consulta busca las filas que tienen \texttt{ambient\_memory} como \texttt{DisplayName} y mostramos el resultado en forma tabular. La Tabla~\ref{tbl:ambient_memory} muestra los resultados.
 	
-	\begin{longtable}[]{@{}lllllllllll@{}}
-		%\label{tbl:ambient_memory}\\
-		\toprule
-		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-			AccountId
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-			Age
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			CreationDate
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-			DisplayName
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-			DownVotes
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-			Id
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			LastAccessDate
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			Location
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			Reputation
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			UpVotes
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			Views
-			\strut\end{minipage}\tabularnewline
-		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-			4529331
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-			null
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			2014-06-20T12:01:\ldots{}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-			ambient\_memory
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			0
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-			28494
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			2014-06-20T12:01:\ldots{}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			New York, United \ldots{}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			1
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			0
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			0
-			\strut\end{minipage}\tabularnewline
-		\bottomrule
-	\end{longtable}
+	\begin{table}[htbp!]
+		\centering
+		\caption{Información del usuario \texttt{ambient\_memory}}
+		\label{tbl:ambient_memory}
+		\resizebox{\textwidth}{!}{%
+			\begin{tabular}{@{}ccccccccccc@{}}
+				\toprule
+				\textbf{AccountId} & \textbf{Age} & \textbf{CreationDate} & \textbf{DisplayName} & \textbf{DownVotes} & \textbf{Id} & \textbf{LastAccessDate} & \textbf{Location}    & \textbf{Reputation} & \textbf{UpVotes} & \textbf{Views} \\ \midrule
+				4529331            & null         & 2014-06-20T12:01:...  & ambient\_memory      & 0                  & 28494       & 2014-06-20T12:01:...    & New York, United ... & 1                   & 0                & 0              \\ \bottomrule
+			\end{tabular}%
+		}
+	\end{table}
 	
-	\item Los 10 usuarios con mayor reputación (\texttt{Reputation}).\\
+	\item Los 10 usuarios con mayor reputación.\\
 	
 	La consulta es la siguiente:
 	
@@ -401,124 +229,34 @@ A continuación, resolveremos una serie de consultas sobre el fichero XML.
 	df.sort(df.Reputation.desc()).limit(10).show()
 	
 	''' O de forma equivalente '''
+	
 	df.sort("Reputation", ascending=False).limit(10).show()
 	\end{verbatim}
 	
-	La consulta ordena la columna \texttt{Reputation} de forma descendente, selecciona las 10 primeras filas y muestra el resultado en forma tabular. El resultado de la consulta se puede ver en la Figura~\ref{tbl:reputation}.
+	La consulta ordena la columna \texttt{Reputation} de forma descendente y selecciona las 10 primeras filas y el resultado se muestra en forma tabular. La Tabla~\ref{tbl:reputation} muestra los resultados de esta consulta.
 	
-	\begin{longtable}[]{@{}lllllllllll@{}}
-		\label{tbl:reputation}\\
-		\toprule
-		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-			AccountId
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-			Age
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			CreationDate
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.07\columnwidth}\raggedright\strut
-			DisplayName
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-			DownVotes
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-			Id
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			LastAccessDate
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			Location
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			Reputation
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			UpVotes
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			Views
-			\strut\end{minipage}\tabularnewline
-		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-			41067 893673 3776439 1057622 12203 486482 375283 359788 102643 1170648
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-			43 null null null 32 44 null 53 36 null
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			2011-02-28T04:00:\ldots{} 2011-09-06T19:47:\ldots{}
-			2013-12-26T15:54:\ldots{} 2011-11-22T14:47:\ldots{}
-			2011-02-01T22:00:\ldots{} 2012-09-10T13:52:\ldots{}
-			2011-03-07T02:09:\ldots{} 2011-04-28T17:25:\ldots{}
-			2011-01-11T20:56:\ldots{} 2012-03-06T21:45:\ldots{}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.07\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			DVK
-			Thaddeus
-			Richard
-			\end{verbatim}
-			
-			Slytherincess Jeff Darth Satan Keen Tango DavRob60 phantom42
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			1806
-			41
-			2288
-			179
-			44
-			192
-			1618
-			7
-			242
-			406
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-			976 2765 20774 3500 656 8719 1027 1693 45 5184
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			2015-03-08T02:21:\ldots{} 2015-03-07T21:21:\ldots{}
-			2015-03-08T02:36:\ldots{} 2015-03-08T00:08:\ldots{}
-			2015-03-08T02:28:\ldots{} 2015-03-07T21:49:\ldots{}
-			2015-03-08T01:44:\ldots{} 2015-03-06T02:46:\ldots{}
-			2015-03-06T11:41:\ldots{} 2015-03-08T03:15:\ldots{}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			New York, NY
-			Hayward, CA
-			UK
-			Azkaban
-			Cincinnati, OH
-			null
-			null
-			\end{verbatim}
-			
-			Richmond, VA, USA Salaberry-de-Vall\ldots{} Orlando, FL
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			148259 118763 92783 67739 62833 57681 49731 48075 47505 47257
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			5503 1934 3878 841 2230 910 4875 1919 3799 2003
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			6224 3101 7577 3562 1362 1515 2560 1517 1671 1771
-			\strut\end{minipage}\tabularnewline
-		\bottomrule
-	\end{longtable}
-	
+	\begin{table}[htbp!]
+		\centering
+		\caption{Los 10 usuarios con más reputación}
+		\label{tbl:reputation}
+		\resizebox{\textwidth}{!}{%
+			\begin{tabular}{@{}ccccccccccc@{}}
+				\toprule
+				\textbf{AccountId} & \textbf{Age} & \textbf{CreationDate} & \textbf{DisplayName} & \textbf{DownVotes} & \textbf{Id} & \textbf{LastAccessDate} & \textbf{Location}    & \textbf{Reputation} & \textbf{UpVotes} & \textbf{Views} \\ \midrule
+				41067              & 43           & 2011-02-28T04:00:...  & DVK                  & 1806               & 1806        & 2015-03-08T02:21:...    & New York, NY         & 148259              & 5503             & 6224           \\
+				893673             & null         & 2011-09-06T19:47:...  & Thaddeus             & 41                 & 2765        & 2015-03-07T21:21:...    & Hayward, CA          & 118763              & 1934             & 3101           \\
+				3776439            & null         & 2013-12-26T15:54:...  & Richard              & 2288               & 20774       & 2015-03-08T02:36:...    & UK                   & 92783               & 3878             & 7577           \\
+				1057622            & null         & 2011-11-22T14:47:...  & Slytherincess        & 179                & 3500        & 2015-03-08T00:08:...    & Azkaban              & 67739               & 841              & 3562           \\
+				12203              & 32           & 2011-02-01T22:00:...  & Jeff                 & 44                 & 656         & 2015-03-08T02:28:...    & Cincinnati, OH       & 62833               & 2230             & 1362           \\
+				486482             & 44           & 2012-09-10T13:52:...  & Darth Satan          & 192                & 8719        & 2015-03-07T21:49:...    & null                 & 57681               & 910              & 1515           \\
+				375283             & null         & 2011-03-07T02:09:...  & Keen                 & 1618               & 1027        & 2015-03-08T01:44:...    & null                 & 49731               & 4875             & 2560           \\
+				359788             & 53           & 2011-04-28T17:25:...  & Tango                & 7                  & 1693        & 2015-03-06T02:46:...    & Richmond, VA, USA    & 48075               & 1919             & 1517           \\
+				102643             & 36           & 2011-01-11T20:56:...  & DavRob60             & 242                & 45          & 2015-03-06T11:41:...    & Salaberry-de-Vall... & 47505               & 3799             & 1671           \\
+				1170648|           & null         & 2012-03-06T21:45:...  & phantom42            & 406                & 5184        & 2015-03-08T03:15:...    & Orlando, FL          & 47257               & 2003             & 1771           \\ \bottomrule
+			\end{tabular}%
+		}
+	\end{table}
+		
 	\item Los usuarios con la fecha de creación más antigua y la más reciente, respectivamente.\\
 	
 	La consulta es la siguiente:
@@ -535,176 +273,32 @@ A continuación, resolveremos una serie de consultas sobre el fichero XML.
 	
 	Las Tablas~\ref{tbl:mas_antiguo}~y~\ref{tbl:mas_reciente} muestra los usuarios con fecha de creación de su cuenta más antigua y más reciente, respectivamente.\\  
 	
-	Las Tablas~\ref{tbl:menos_edad}~y~\ref{tbl:mas_edad} muestran los usuarios más jóvenes y viejos, respectivamente.\\  
+	\begin{table}[htbp!]
+		\centering
+		\caption{Usuario más antiguo}
+		\label{tbl:mas_antiguo}
+		\resizebox{\textwidth}{!}{%
+			\begin{tabular}{@{}ccccccccccc@{}}
+				\toprule
+				\textbf{AccountId} & \textbf{Age} & \textbf{CreationDate} & \textbf{DisplayName} & \textbf{DownVotes} & \textbf{Id} & \textbf{LastAccessDate} & \textbf{Location}    & \textbf{Reputation} & \textbf{UpVotes} & \textbf{Views} \\ \midrule
+				4529331            & null         & 2014-06-20T12:01:...  & ambient\_memory      & 0                  & 28494       & 2014-06-20T12:01:...    & New York, United ... & 1                   & 0                & 0              \\ \bottomrule
+			\end{tabular}%
+		}
+	\end{table}
 	
-	\begin{longtable}[]{@{}lllllllllll@{}}
-		\label{tbl:mas_antiguo}\\
-		\toprule
-		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-			AccountId
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-			Age
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			CreationDate
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-			DisplayName
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-			DownVotes
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-			Id
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			LastAccessDate
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			Location
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			Reputation
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			UpVotes
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			Views
-			\strut\end{minipage}\tabularnewline
-		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-			4529331
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-			null
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			2014-06-20T12:01:\ldots{}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
-			ambient\_memory
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			0
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-			28494
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			2014-06-20T12:01:\ldots{}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			New York, United \ldots{}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			1
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			0
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			0
-			\strut\end{minipage}\tabularnewline
-		\bottomrule
-	\end{longtable}
 	
-	 
-	\begin{longtable}[]{@{}lllllllllll@{}}
-		\label{tbl:mas_reciente}\\
-		\toprule
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			AccountId
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-			Age
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			CreationDate
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.07\columnwidth}\raggedright\strut
-			DisplayName
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			DownVotes
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.02\columnwidth}\raggedright\strut
-			Id
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			LastAccessDate
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			Location
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			Reputation
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			UpVotes
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			Views
-			\strut\end{minipage}\tabularnewline
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			-1
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-			null
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-			2011-01-11T19:19:\ldots{}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.07\columnwidth}\raggedright\strut
-			Community
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			3953
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.02\columnwidth}\raggedright\strut
-			-1
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-			2011-01-11T19:19:\ldots{}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			on the server farm
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			1
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			2587
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			0
-			\strut\end{minipage}\tabularnewline
-		\bottomrule
-	\end{longtable}
+	\begin{table}[htbp!]
+		\centering
+		\caption{Usuario más reciente}
+		\label{tbl:mas_reciente}
+		\resizebox{\textwidth}{!}{%
+			\begin{tabular}{@{}ccccccccccc@{}}
+				\toprule
+				\textbf{AccountId} & \textbf{Age} & \textbf{CreationDate} & \textbf{DisplayName} & \textbf{DownVotes} & \textbf{Id} & \textbf{LastAccessDate} & \textbf{Location}  & \textbf{Reputation} & \textbf{UpVotes} & \textbf{Views} \\ \midrule
+				-1                 & null         & 2011-01-11T19:19:...  & Community            & 3953               & -1          & 2011-01-11T19:19:...    & on the server farm & 1                   & 2587             & 0              \\ \bottomrule
+			\end{tabular}%
+		}
+	\end{table}
 	
 	\item El usuario más joven y el más viejo (de los que han indicado una edad válida en el campo \texttt{Age}).\\
 	
@@ -736,270 +330,22 @@ A continuación, resolveremos una serie de consultas sobre el fichero XML.
 	df.filter(df.Age == ages[0].max).show()
 	\end{verbatim}
 	
-	\begin{longtable}[]{@{}lllllllllll@{}}
-		\label{tbl:menos_edad}\\
-		\toprule
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			AccountId
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-			Age
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			CreationDate
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.07\columnwidth}\raggedright\strut
-			DisplayName
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			DownVotes
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.02\columnwidth}\raggedright\strut
-			Id
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			LastAccessDate
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			Location
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			Reputation
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			UpVotes
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			Views
-			\strut\end{minipage}\tabularnewline
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			-1
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-			null
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-			2011-01-11T19:19:\ldots{}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.07\columnwidth}\raggedright\strut
-			Community
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			3953
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.02\columnwidth}\raggedright\strut
-			-1
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
-			2011-01-11T19:19:\ldots{}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			on the server farm
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			1
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			2587
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			0
-			\strut\end{minipage}\tabularnewline
-		\bottomrule
-	\end{longtable}
+	La consulta muestra los usuarios que tienen la edad mínima o máxima y se muestra de forma tabular. Las Tablas~\ref{tbl:menos_edad}~y~\ref{tbl:mas_edad} muestran a los usuarios más jóvenes y viejos, respectivamente.\\  
 	
-	\begin{longtable}[]{@{}lllllllllll@{}}
-		\label{tbl:mas_edad}\\
-		\toprule
-		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-			AccountId
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.02\columnwidth}\raggedright\strut
-			Age
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			CreationDate
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			DisplayName
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-			DownVotes
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-			Id
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			LastAccessDate
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			Location
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			Reputation
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			UpVotes
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			Views
-			\strut\end{minipage}\tabularnewline
-		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			2913
-			9606
-			\end{verbatim}
-			
-			237100 8802 299848 564 413744 114869 388430 47040 21774 128120 150461
-			1399708 1196073 427266 286976 989850 2187757
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.02\columnwidth}\raggedright\strut
-			95 95 95 95 95 95 95 95 95 95 95 95 95 95 95 95 95 95 95
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			2011-01-19T21:58:\ldots{} 2011-03-20T00:47:\ldots{}
-			2011-05-03T23:27:\ldots{} 2011-05-20T08:27:\ldots{}
-			2011-06-04T09:59:\ldots{} 2011-06-10T12:49:\ldots{}
-			2011-06-13T08:12:\ldots{} 2011-07-02T23:26:\ldots{}
-			2011-07-27T03:05:\ldots{} 2011-10-21T03:45:\ldots{}
-			2011-10-29T00:25:\ldots{} 2011-11-02T00:13:\ldots{}
-			2012-03-14T16:07:\ldots{} 2012-05-16T19:20:\ldots{}
-			2012-05-17T23:24:\ldots{} 2012-08-02T19:32:\ldots{}
-			2012-08-29T05:03:\ldots{} 2012-08-30T10:02:\ldots{}
-			2012-12-29T01:52:\ldots{}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			bill weaver
-			Mark Bessey
-			Kevin
-			Sam Meldrum
-			jufrpeji
-			Keng
-			HackToHell
-			Crazy Eddie
-			\end{verbatim}
-			
-			Quinn Culver xiaohouzi79 1.01pm JK. iamserious JNat MrEngineer13 Merlin
-			Pubby JanOlMajti Watch
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			0
-			1
-			0
-			0
-			0
-			0
-			0
-			0
-			0
-			0
-			0
-			18
-			0
-			11
-			0
-			0
-			0
-			0
-			0
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
-			367 1266 1761 1925 2115 2181 2205 2341 2472 3120 3192 3213 5323 6365
-			6392 8091 8531 8554 11616
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			2011-02-13T13:03:\ldots{} 2015-03-04T22:20:\ldots{}
-			2015-02-20T01:48:\ldots{} 2011-05-20T17:58:\ldots{}
-			2012-09-12T09:15:\ldots{} 2011-06-10T12:49:\ldots{}
-			2015-02-22T17:09:\ldots{} 2014-08-03T18:08:\ldots{}
-			2015-01-20T16:08:\ldots{} 2014-01-16T23:46:\ldots{}
-			2013-07-10T04:29:\ldots{} 2015-03-04T22:47:\ldots{}
-			2015-03-05T16:45:\ldots{} 2015-03-02T16:56:\ldots{}
-			2015-02-12T14:56:\ldots{} 2013-11-06T02:00:\ldots{}
-			2014-01-12T13:06:\ldots{} 2013-02-04T12:19:\ldots{}
-			2013-02-13T08:37:\ldots{}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			United States
-			California
-			Cincinnati, OH
-			\end{verbatim}
-			
-			Chesham, United K\ldots{} Spain Parts Unknown Mordor Gliese 581G South
-			Bend, IN Australia Atlantis, FL Teresina, Brazil London Europe United
-			States United Kingdom United States Celje,Slovenia On someones wrist
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			101
-			1723
-			1
-			101
-			101
-			101
-			101
-			161
-			103
-			431
-			101
-			944
-			101
-			521
-			101
-			188
-			101
-			101
-			89
-			\end{verbatim}
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			\begin{verbatim}
-			2
-			78
-			0
-			0
-			1
-			0
-			9
-			0
-			0
-			8
-			3
-			22
-			2
-			\end{verbatim}
-			
-			352 9 4 9 0
-			\strut\end{minipage} &
-		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
-			0 31 1 0 1 0 3 22 1 10 0 29 2 38 0 8 0 0
-			\strut\end{minipage}\tabularnewline
-		\bottomrule
-	\end{longtable}
+	\begin{table}[htbp!]
+		\centering
+		\caption{Usuarios más jovenes}
+		\label{tbl:menos_edad}
+		\resizebox{\textwidth}{!}{%
+			\begin{tabular}{@{}ccccccccccc@{}}
+				\toprule
+				\textbf{AccountId} & \textbf{Age} & \textbf{CreationDate} & \textbf{DisplayName} & \textbf{DownVotes} & \textbf{Id} & \textbf{LastAccessDate} & \textbf{Location} & \textbf{Reputation} & \textbf{UpVotes} & \textbf{Views} \\ \midrule
+				2178726            & 14           & 2013-05-01T20:06:...  & danilka1             & 0                  & 14208       & 2013-05-01T20:06:...    & planet earth      & 101                 & 0                & 0              \\
+				198592             & 14           & 2013-08-29T15:11:...  & Ramchandra Apte      & 0                  & 16999       & 2014-12-24T13:08:...    & Bangalore, India  & 103                 & 9                & 3              \\ \bottomrule
+			\end{tabular}%
+		}
+	\end{table}
+	
 	
 \end{enumerate}
 \section{Conclusiones}

@@ -47,7 +47,7 @@
 
 \portada{Práctica final}{Análisis de Big Data}{Análisis de una comunidad virtual \\ de Stack Exchange}{José Ignacio Escribano}{Móstoles}
 
-\listoffigures
+\listoftables
 \thispagestyle{empty}
 \newpage
 
@@ -61,7 +61,947 @@
 
 \section{Introducción}
 
+En esta práctica final resolveremos una serie de cuestiones relativas a los usuarios que han participado en la comunidad \url{http://scifi.stackexchange.com}, dedicada a resolver preguntas sobre temas de ciencia ficción y fantasía.\\
 
+El archivo \texttt{users.xml} contiene información sobre el perfil de un grupo del total de usuarios de la comunidad que han participado en ella, hasta marzo de 2015.\\
+
+Utilizaremos Apache Spark para realizar el análisis de este archivo, utilizando un DataFrames.
+
+\section{Carga de los datos}
+
+Para cargar los datos, usamos el siguiente comando:
+
+\begin{verbatim}
+df = sqlContext.read.format('com.databricks.spark.xml').options(rowTag='row').load('users.xml')
+\end{verbatim}
+
+Este creará un DataFrame a partir del fichero \texttt{users.xml}, que se leerá como archivo \texttt{xml}, y se guardará los hijos de un elemento \texttt{row} como una columna, quedando como una tabla.
+
+\section{Ejercicio 1}
+
+Inspeccionamos las primeras filas del archivo para ver cuáles son los elementos de los que consta cada uno de ellos.
+
+\begin{verbatim}
+<users>
+  <row>
+    <Id>-1</Id>
+    <Reputation>1</Reputation>
+    <CreationDate>2011-01-11T19:19:36.483</CreationDate>
+    <DisplayName>Community</DisplayName>
+    <LastAccessDate>2011-01-11T19:19:36.483</LastAccessDate>
+    <Location>on the server farm</Location>
+    <Views>0</Views>
+    <UpVotes>2587</UpVotes>
+    <DownVotes>3953</DownVotes>
+    <AccountId>-1</AccountId>
+  </row>
+  <row>
+    <Id>2</Id>
+    <Reputation>101</Reputation>
+    <CreationDate>2011-01-11T19:50:40.620</CreationDate>
+    <DisplayName>Geoff Dalgas</DisplayName>
+    <LastAccessDate>2015-02-05T00:03:28.030</LastAccessDate>
+    <Location>Corvallis, OR</Location>
+    <Views>21</Views>
+    <UpVotes>1</UpVotes>
+    <DownVotes>0</DownVotes>
+    <Age>38</Age>
+    <AccountId>2</AccountId>
+  </row>
+  ...
+</users>
+\end{verbatim}
+
+Observamos que tenemos 11 elementos en cada fila:
+
+\begin{itemize}
+	\item AccountId: Id de la cuenta
+	\item Age: edad del usuario
+	\item CreationDate: fecha de creación de la cuenta
+	\item DisplayName: nombre de usuario
+	\item DownVotes: votos a favor
+	\item Id: Id de usuario
+	\item LastAccessDate: fecha del último acceso
+	\item Location: localización
+	\item Reputation: puntos de reputación
+	\item UpVotes: votos a favor
+	\item Views: visitas a su página de perfil
+\end{itemize}
+
+Otra forma de comprobar el número de columnas de nuestro fichero es imprimir el esquema usando el comando
+
+\begin{verbatim}
+df.printSchema()
+\end{verbatim}
+
+La salida de este comando es
+
+\begin{verbatim}
+root
+  |-- AccountId: long (nullable = true)
+  |-- Age: long (nullable = true)
+  |-- CreationDate: string (nullable = true)
+  |-- DisplayName: string (nullable = true)
+  |-- DownVotes: long (nullable = true)
+  |-- Id: long (nullable = true)
+  |-- LastAccessDate: string (nullable = true)
+  |-- Location: string (nullable = true)
+  |-- Reputation: long (nullable = true)
+  |-- UpVotes: long (nullable = true)
+  |-- Views: long (nullable = true)
+\end{verbatim}
+
+Además de las columnas, este comando nos devuelve el tipo de cada variable.\\
+
+Si queremos ver el contenido del fichero, usamos el comando, que muestra las 10 primeras filas del fichero.
+
+\begin{verbatim}
+df.show(10)
+\end{verbatim}
+
+El comando devuelve la Tabla~\ref{tbl:head}.\\
+
+\begin{longtable}[]{@{}lllllllllll@{}}
+	%\label{tbl:head}
+	%\caption{10 primeras filas del fichero}\\
+	\toprule
+	\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+		AccountId
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+		Age
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+		\begin{verbatim}
+		CreationDate
+		\end{verbatim}
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
+		DisplayName
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+		DownVotes
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.02\columnwidth}\raggedright\strut
+		Id
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+		\begin{verbatim}
+		LastAccessDate
+		\end{verbatim}
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+		\begin{verbatim}
+		Location
+		\end{verbatim}
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+		Reputation
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+		UpVotes
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+		Views
+		\strut\end{minipage}\tabularnewline
+	\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+		\begin{verbatim}
+		-1
+		2
+		7598
+		1998
+		\end{verbatim}
+		
+		29738 32917 33603 51549 3874 15651
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+		null 38 30 29 null 30 30 38 48 42
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+		2011-01-11T19:19:\ldots{} 2011-01-11T19:50:\ldots{}
+		2011-01-11T19:55:\ldots{} 2011-01-11T20:17:\ldots{}
+		2011-01-11T20:18:\ldots{} 2011-01-11T20:29:\ldots{}
+		2011-01-11T20:37:\ldots{} 2011-01-11T20:37:\ldots{}
+		2011-01-11T20:38:\ldots{} 2011-01-11T20:38:\ldots{}
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
+		\begin{verbatim}
+		Community
+		\end{verbatim}
+		
+		Geoff Dalgas Nick Craver Emmett Kevin Montrose David Fullerton Sorantis
+		GAThrawn Rodger Cooley MatthewMartin
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+		\begin{verbatim}
+		3953
+		0
+		0
+		0
+		0
+		4
+		0
+		0
+		3
+		2
+		\end{verbatim}
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.02\columnwidth}\raggedright\strut
+		-1 2 3 4 5 6 7 8 9 10
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+		2011-01-11T19:19:\ldots{} 2015-02-05T00:03:\ldots{}
+		2015-03-01T13:49:\ldots{} 2013-05-06T20:52:\ldots{}
+		2015-02-15T05:27:\ldots{} 2015-03-06T22:57:\ldots{}
+		2014-07-23T12:00:\ldots{} 2015-02-18T23:17:\ldots{}
+		2015-03-04T19:47:\ldots{} 2015-03-06T01:30:\ldots{}
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+		on the server farm Corvallis, OR Winston-Salem, NC San Francisco, CA New
+		York City, Ne\ldots{} New York, NY Sweden United Kingdom Houston, TX
+		United States
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+		\begin{verbatim}
+		1
+		101
+		101
+		101
+		101
+		99
+		146
+		103
+		1816
+		1787
+		\end{verbatim}
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+		2587 1 3 0 32 63 5 19 211 78
+		\strut\end{minipage} &
+	\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+		0 21 10 7 11 13 15 98 85 48
+		\strut\end{minipage}\tabularnewline
+	\bottomrule
+\end{longtable}
+
+\section{Ejercicio 2}
+A continuación, resolveremos una serie de consultas sobre el fichero XML.
+
+\begin{enumerate}
+	\item Número total de registros de usuarios en el fichero.
+	
+	La consulta que realizamos es la siguiente:
+	
+	\begin{verbatim}
+	totalUsers = df.count()
+	print(totalUsers)
+	\end{verbatim}
+	
+	La consulta devuelve 20333. Es decir, tenemos que el fichero tiene 20333 usuarios.
+	
+	\item Todos los datos disponibles sobre el usuario con \texttt{DisplayName} igual a \texttt{ambient\_memory}.
+	
+	La consulta que realizamos es la siguiente:
+	
+	\begin{verbatim}
+	df.filter(df["DisplayName"] == "ambient_memory").show()
+	\end{verbatim}
+	
+	La consulta busca las filas que tienen \texttt{ambient\_memory} como \texttt{DisplayName} y mostramos el resultado en forma tabular. La Tabla~\ref{tbl:ambient_memory} muestra los resultados.
+	
+	\begin{longtable}[]{@{}lllllllllll@{}}
+		%\label{tbl:ambient_memory}\\
+		\toprule
+		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+			AccountId
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+			Age
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			CreationDate
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
+			DisplayName
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+			DownVotes
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+			Id
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			LastAccessDate
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			Location
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			Reputation
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			UpVotes
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			Views
+			\strut\end{minipage}\tabularnewline
+		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+			4529331
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+			null
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			2014-06-20T12:01:\ldots{}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
+			ambient\_memory
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			0
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+			28494
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			2014-06-20T12:01:\ldots{}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			New York, United \ldots{}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			1
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			0
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			0
+			\strut\end{minipage}\tabularnewline
+		\bottomrule
+	\end{longtable}
+	
+	\item Los 10 usuarios con mayor reputación (\texttt{Reputation}).\\
+	
+	La consulta es la siguiente:
+	
+	\begin{verbatim}
+	df.sort(df.Reputation.desc()).limit(10).show()
+	
+	''' O de forma equivalente '''
+	df.sort("Reputation", ascending=False).limit(10).show()
+	\end{verbatim}
+	
+	La consulta ordena la columna \texttt{Reputation} de forma descendente, selecciona las 10 primeras filas y muestra el resultado en forma tabular. El resultado de la consulta se puede ver en la Figura~\ref{tbl:reputation}.
+	
+	\begin{longtable}[]{@{}lllllllllll@{}}
+		\label{tbl:reputation}\\
+		\toprule
+		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+			AccountId
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+			Age
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			CreationDate
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.07\columnwidth}\raggedright\strut
+			DisplayName
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+			DownVotes
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+			Id
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			LastAccessDate
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			Location
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			Reputation
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			UpVotes
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			Views
+			\strut\end{minipage}\tabularnewline
+		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+			41067 893673 3776439 1057622 12203 486482 375283 359788 102643 1170648
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+			43 null null null 32 44 null 53 36 null
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			2011-02-28T04:00:\ldots{} 2011-09-06T19:47:\ldots{}
+			2013-12-26T15:54:\ldots{} 2011-11-22T14:47:\ldots{}
+			2011-02-01T22:00:\ldots{} 2012-09-10T13:52:\ldots{}
+			2011-03-07T02:09:\ldots{} 2011-04-28T17:25:\ldots{}
+			2011-01-11T20:56:\ldots{} 2012-03-06T21:45:\ldots{}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.07\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			DVK
+			Thaddeus
+			Richard
+			\end{verbatim}
+			
+			Slytherincess Jeff Darth Satan Keen Tango DavRob60 phantom42
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			1806
+			41
+			2288
+			179
+			44
+			192
+			1618
+			7
+			242
+			406
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+			976 2765 20774 3500 656 8719 1027 1693 45 5184
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			2015-03-08T02:21:\ldots{} 2015-03-07T21:21:\ldots{}
+			2015-03-08T02:36:\ldots{} 2015-03-08T00:08:\ldots{}
+			2015-03-08T02:28:\ldots{} 2015-03-07T21:49:\ldots{}
+			2015-03-08T01:44:\ldots{} 2015-03-06T02:46:\ldots{}
+			2015-03-06T11:41:\ldots{} 2015-03-08T03:15:\ldots{}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			New York, NY
+			Hayward, CA
+			UK
+			Azkaban
+			Cincinnati, OH
+			null
+			null
+			\end{verbatim}
+			
+			Richmond, VA, USA Salaberry-de-Vall\ldots{} Orlando, FL
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			148259 118763 92783 67739 62833 57681 49731 48075 47505 47257
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			5503 1934 3878 841 2230 910 4875 1919 3799 2003
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			6224 3101 7577 3562 1362 1515 2560 1517 1671 1771
+			\strut\end{minipage}\tabularnewline
+		\bottomrule
+	\end{longtable}
+	
+	\item Los usuarios con la fecha de creación más antigua y la más reciente, respectivamente.\\
+	
+	La consulta es la siguiente:
+	
+	\begin{verbatim}
+	''' Usuario más antiguo '''
+	df.sort("CreationDate", ascending=False).limit(1).show()
+	
+	''' Usuario más reciente '''
+	df.sort("CreationDate", ascending=True).limit(1).show()
+	\end{verbatim}
+	
+	La consulta ordena descendentemente (ascentemente) por la columna \texttt{CreationDate}, se selecciona la primera fila y se muestra de forma tabular. La primera consulta devuelve el usuario más antiguo y la segunda, el usuario más reciente.\\
+	
+	Las Tablas~\ref{tbl:mas_antiguo}~y~\ref{tbl:mas_reciente} muestra los usuarios con fecha de creación de su cuenta más antigua y más reciente, respectivamente.\\  
+	
+	Las Tablas~\ref{tbl:menos_edad}~y~\ref{tbl:mas_edad} muestran los usuarios más jóvenes y viejos, respectivamente.\\  
+	
+	\begin{longtable}[]{@{}lllllllllll@{}}
+		\label{tbl:mas_antiguo}\\
+		\toprule
+		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+			AccountId
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+			Age
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			CreationDate
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
+			DisplayName
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+			DownVotes
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+			Id
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			LastAccessDate
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			Location
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			Reputation
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			UpVotes
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			Views
+			\strut\end{minipage}\tabularnewline
+		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+			4529331
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+			null
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			2014-06-20T12:01:\ldots{}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
+			ambient\_memory
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			0
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+			28494
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			2014-06-20T12:01:\ldots{}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			New York, United \ldots{}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			1
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			0
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			0
+			\strut\end{minipage}\tabularnewline
+		\bottomrule
+	\end{longtable}
+	
+	 
+	\begin{longtable}[]{@{}lllllllllll@{}}
+		\label{tbl:mas_reciente}\\
+		\toprule
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			AccountId
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+			Age
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			CreationDate
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.07\columnwidth}\raggedright\strut
+			DisplayName
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			DownVotes
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.02\columnwidth}\raggedright\strut
+			Id
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			LastAccessDate
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			Location
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			Reputation
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			UpVotes
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			Views
+			\strut\end{minipage}\tabularnewline
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			-1
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+			null
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
+			2011-01-11T19:19:\ldots{}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.07\columnwidth}\raggedright\strut
+			Community
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			3953
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.02\columnwidth}\raggedright\strut
+			-1
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
+			2011-01-11T19:19:\ldots{}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			on the server farm
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			1
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			2587
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			0
+			\strut\end{minipage}\tabularnewline
+		\bottomrule
+	\end{longtable}
+	
+	\item El usuario más joven y el más viejo (de los que han indicado una edad válida en el campo \texttt{Age}).\\
+	
+	La consulta es la siguiente:
+	
+	\begin{verbatim}
+	''' Importamos las funciones `max` y `min` '''
+	from pyspark.sql.functions import min, max
+	
+	''' Calculamos la edad máxima y mínima de la columna `Age` '''
+	ages = df.select(min("Age").alias("min"), max("Age").alias("max")).collect()
+	\end{verbatim}
+	
+	La consulta devuelve 
+	
+	\begin{verbatim}
+	[Row(min=14, max=95)]
+	\end{verbatim}
+	
+	Es decir, la edad mínima es 14 y la máxima es 95.\\
+	
+	Para conocer la información de los usuarios que tienen estas edades, hacemos la siguiente consulta:
+	
+	\begin{verbatim}
+	''' Usuarios con la edad mínima guardada en la variable `ages` '''
+	df.filter(df.Age == ages[0].min).show()
+	
+	''' Usuarios con la edad máxima guardada en la variable `ages` '''
+	df.filter(df.Age == ages[0].max).show()
+	\end{verbatim}
+	
+	\begin{longtable}[]{@{}lllllllllll@{}}
+		\label{tbl:menos_edad}\\
+		\toprule
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			AccountId
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+			Age
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			CreationDate
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.07\columnwidth}\raggedright\strut
+			DisplayName
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			DownVotes
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.02\columnwidth}\raggedright\strut
+			Id
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			LastAccessDate
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			Location
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			Reputation
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			UpVotes
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			Views
+			\strut\end{minipage}\tabularnewline
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			-1
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+			null
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
+			2011-01-11T19:19:\ldots{}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.07\columnwidth}\raggedright\strut
+			Community
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			3953
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.02\columnwidth}\raggedright\strut
+			-1
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.12\columnwidth}\raggedright\strut
+			2011-01-11T19:19:\ldots{}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			on the server farm
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			1
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			2587
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			0
+			\strut\end{minipage}\tabularnewline
+		\bottomrule
+	\end{longtable}
+	
+	\begin{longtable}[]{@{}lllllllllll@{}}
+		\label{tbl:mas_edad}\\
+		\toprule
+		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+			AccountId
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.02\columnwidth}\raggedright\strut
+			Age
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			CreationDate
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			DisplayName
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+			DownVotes
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+			Id
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			LastAccessDate
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			Location
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			Reputation
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			UpVotes
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			Views
+			\strut\end{minipage}\tabularnewline
+		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			2913
+			9606
+			\end{verbatim}
+			
+			237100 8802 299848 564 413744 114869 388430 47040 21774 128120 150461
+			1399708 1196073 427266 286976 989850 2187757
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.02\columnwidth}\raggedright\strut
+			95 95 95 95 95 95 95 95 95 95 95 95 95 95 95 95 95 95 95
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			2011-01-19T21:58:\ldots{} 2011-03-20T00:47:\ldots{}
+			2011-05-03T23:27:\ldots{} 2011-05-20T08:27:\ldots{}
+			2011-06-04T09:59:\ldots{} 2011-06-10T12:49:\ldots{}
+			2011-06-13T08:12:\ldots{} 2011-07-02T23:26:\ldots{}
+			2011-07-27T03:05:\ldots{} 2011-10-21T03:45:\ldots{}
+			2011-10-29T00:25:\ldots{} 2011-11-02T00:13:\ldots{}
+			2012-03-14T16:07:\ldots{} 2012-05-16T19:20:\ldots{}
+			2012-05-17T23:24:\ldots{} 2012-08-02T19:32:\ldots{}
+			2012-08-29T05:03:\ldots{} 2012-08-30T10:02:\ldots{}
+			2012-12-29T01:52:\ldots{}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			bill weaver
+			Mark Bessey
+			Kevin
+			Sam Meldrum
+			jufrpeji
+			Keng
+			HackToHell
+			Crazy Eddie
+			\end{verbatim}
+			
+			Quinn Culver xiaohouzi79 1.01pm JK. iamserious JNat MrEngineer13 Merlin
+			Pubby JanOlMajti Watch
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.05\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			0
+			1
+			0
+			0
+			0
+			0
+			0
+			0
+			0
+			0
+			0
+			18
+			0
+			11
+			0
+			0
+			0
+			0
+			0
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.03\columnwidth}\raggedright\strut
+			367 1266 1761 1925 2115 2181 2205 2341 2472 3120 3192 3213 5323 6365
+			6392 8091 8531 8554 11616
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			2011-02-13T13:03:\ldots{} 2015-03-04T22:20:\ldots{}
+			2015-02-20T01:48:\ldots{} 2011-05-20T17:58:\ldots{}
+			2012-09-12T09:15:\ldots{} 2011-06-10T12:49:\ldots{}
+			2015-02-22T17:09:\ldots{} 2014-08-03T18:08:\ldots{}
+			2015-01-20T16:08:\ldots{} 2014-01-16T23:46:\ldots{}
+			2013-07-10T04:29:\ldots{} 2015-03-04T22:47:\ldots{}
+			2015-03-05T16:45:\ldots{} 2015-03-02T16:56:\ldots{}
+			2015-02-12T14:56:\ldots{} 2013-11-06T02:00:\ldots{}
+			2014-01-12T13:06:\ldots{} 2013-02-04T12:19:\ldots{}
+			2013-02-13T08:37:\ldots{}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			United States
+			California
+			Cincinnati, OH
+			\end{verbatim}
+			
+			Chesham, United K\ldots{} Spain Parts Unknown Mordor Gliese 581G South
+			Bend, IN Australia Atlantis, FL Teresina, Brazil London Europe United
+			States United Kingdom United States Celje,Slovenia On someones wrist
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.06\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			101
+			1723
+			1
+			101
+			101
+			101
+			101
+			161
+			103
+			431
+			101
+			944
+			101
+			521
+			101
+			188
+			101
+			101
+			89
+			\end{verbatim}
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			\begin{verbatim}
+			2
+			78
+			0
+			0
+			1
+			0
+			9
+			0
+			0
+			8
+			3
+			22
+			2
+			\end{verbatim}
+			
+			352 9 4 9 0
+			\strut\end{minipage} &
+		\begin{minipage}[t]{0.04\columnwidth}\raggedright\strut
+			0 31 1 0 1 0 3 22 1 10 0 29 2 38 0 8 0 0
+			\strut\end{minipage}\tabularnewline
+		\bottomrule
+	\end{longtable}
+	
+\end{enumerate}
 \section{Conclusiones}
 
 \newpage
@@ -69,12 +1009,7 @@
 \section{Código Python}
 
 \begin{verbatim}
-from pyspark import SparkConf, SparkContext
-from pyspark.sql import SQLContext
 
-conf = SparkConf().setAppName("Práctica final")
-sc = SparkContext(conf=conf)
-sqlCtx = SQLContext(sc)
 \end{verbatim}
 
 

@@ -28,6 +28,8 @@
 \usepackage{footnote}
 \usepackage{url}
 \usepackage{tikz}
+\usepackage{pdflscape}
+\usepackage{minted}
 
 \setsansfont[Ligatures=TeX]{texgyreadventor}
 \setmainfont[Ligatures=TeX]{texgyrepagella}
@@ -71,9 +73,10 @@ Utilizaremos Apache Spark para realizar el análisis de este archivo, utilizando
 
 Para cargar los datos, usamos el siguiente comando:
 
-\begin{verbatim}
-df = sqlContext.read.format('com.databricks.spark.xml').options(rowTag='row').load('users.xml')
-\end{verbatim}
+\begin{minted}{python}
+df = sqlContext.read.format('com.databricks.spark.xml')\
+               .options(rowTag='row').load('users.xml')
+\end{minted}
 
 Este creará un DataFrame a partir del fichero \texttt{users.xml}, que se leerá como archivo \texttt{xml}, y se guardará los hijos de un elemento \texttt{row} como una columna, quedando como una tabla.
 
@@ -81,7 +84,8 @@ Este creará un DataFrame a partir del fichero \texttt{users.xml}, que se leerá
 
 Inspeccionamos las primeras filas del archivo para ver cuáles son los elementos de los que consta cada uno de ellos.
 
-\begin{verbatim}
+\usemintedstyle{friendly}
+\begin{minted}{xml}
 <users>
   <row>
     <Id>-1</Id>
@@ -110,7 +114,7 @@ Inspeccionamos las primeras filas del archivo para ver cuáles son los elementos
   </row>
   ...
 </users>
-\end{verbatim}
+\end{minted}
 
 Observamos que tenemos 11 elementos en cada fila:
 
@@ -155,9 +159,9 @@ Además de las columnas, este comando nos devuelve el tipo de cada variable.\\
 
 Si queremos ver el contenido del fichero, usamos el comando, que muestra las 10 primeras filas del fichero.
 
-\begin{verbatim}
+\begin{minted}{python}
 df.show(10)
-\end{verbatim}
+\end{minted}
 
 El comando devuelve la Tabla~\ref{tbl:head}.\\
 
@@ -191,10 +195,10 @@ A continuación, resolveremos una serie de consultas sobre el fichero XML.
 	
 	La consulta que realizamos es la siguiente:
 	
-	\begin{verbatim}
+	\begin{minted}{python}
 	totalUsers = df.count()
 	print(totalUsers)
-	\end{verbatim}
+	\end{minted}
 	
 	La consulta devuelve 20333. Es decir, tenemos que el fichero tiene 20333 usuarios.
 	
@@ -202,9 +206,10 @@ A continuación, resolveremos una serie de consultas sobre el fichero XML.
 	
 	La consulta que realizamos es la siguiente:
 	
-	\begin{verbatim}
-	df.filter(df["DisplayName"] == "ambient_memory").show()
-	\end{verbatim}
+	\begin{minted}{python}
+	df.filter(df["DisplayName"] == "ambient_memory")\
+	  .show()
+	\end{minted}
 	
 	La consulta busca las filas que tienen \texttt{ambient\_memory} como \texttt{DisplayName} y mostramos el resultado en forma tabular. La Tabla~\ref{tbl:ambient_memory} muestra los resultados.
 	
@@ -225,13 +230,19 @@ A continuación, resolveremos una serie de consultas sobre el fichero XML.
 	
 	La consulta es la siguiente:
 	
-	\begin{verbatim}
-	df.sort(df.Reputation.desc()).limit(10).show()
+	\begin{minted}{python}
+	df.sort(df.Reputation.desc())\
+	  .limit(10)\
+	  .show()
 	
-	''' O de forma equivalente '''
+	''' 
+	O de forma equivalente 
+	'''
 	
-	df.sort("Reputation", ascending=False).limit(10).show()
-	\end{verbatim}
+	df.sort("Reputation", ascending=False)\
+	  .limit(10)\
+	  .show()
+	\end{minted}
 	
 	La consulta ordena la columna \texttt{Reputation} de forma descendente y selecciona las 10 primeras filas y el resultado se muestra en forma tabular. La Tabla~\ref{tbl:reputation} muestra los resultados de esta consulta.
 	
@@ -261,25 +272,150 @@ A continuación, resolveremos una serie de consultas sobre el fichero XML.
 	
 	La consulta es la siguiente:
 	
-	\begin{verbatim}
-	''' Importamos la función to_date '''
+	\begin{minted}{python}
+	''' 
+	Importamos la función to_date 
+	'''
 	
-	df.select("*").where((to_date(df.CreationDate) == df.select(min(to_date("CreationDate")).alias("min")).collect()[0].min) | (to_date(df.CreationDate) == df.select(max(to_date("CreationDate")).alias("max")).collect()[0].max)).orderBy(to_date("CreationDate")).show()
-	\end{verbatim}
+	from pyspark.sql.functions import to_date
+	
+	df.select("*")\
+	  .where((to_date(df.CreationDate) ==    
+	     df.select(
+	       min(
+	         to_date("CreationDate"))\
+	         .alias("min"))\
+	         .collect()[0].min) | (
+	         to_date(df.CreationDate) == 
+	           df.select(
+	             max(to_date("CreationDate"))\
+	             .alias("max"))\
+	             .collect()[0].max))\
+	    .orderBy(to_date("CreationDate"))\
+	    .show()
+	\end{minted}
 	
 	La consulta selecciona todas las columnas del DataFrame, convierte a tipo Date con la función \texttt{to\_date} la columna \texttt{CreationDate}, y se obtiene el máximo y el mínimo de esta columna, usando las funciones \texttt{max} y \texttt{min}, se filtran los usuarios que coinciden con el valor máximo o mínimo, se ordena por fecha y se muestra por pantalla.\\
 	
 	La Tabla~\ref{tbl:mas_antiguo} muestra los usuarios con fecha de creación de su cuenta más antigua y más reciente.\\
 	
-	\begin{table}[htbp!]
-		\centering
-		\caption{Usuarios más antiguos y recientes}
-		\label{tbl:mas_antiguo}
-		\resizebox{\textwidth}{!}{%
-			\begin{tabular}{@{}ccccccccccc@{}}
-			\toprule
-			AccountId & Age  & CreationDate            & DisplayName           & DownVotes & Id    & LastAccessDate          & Location                         & Reputation & UpVotes & Views \\ \midrule
-			-1        & null & 2011-01-11T19:19:36.483 & Community             & 3953      & -1    & 2011-01-11T19:19:36.483 & on the server farm               & 1          & 2587    & 0     \\
+	Notar que de esta manera obtenemos los usuarios con fecha  mínima y máxima de acuerdo al día, mes y año. Si quisiéramos obtener los usuarios más recientes o antiguos hasta los milisegundos podríamos hacer uso de la siguientes consultas: 
+	
+	\begin{minted}{python}
+	''' 
+	Usuario más antiguo 
+	'''
+	
+	df.sort("CreationDate", ascending=False)\
+	  .limit(1)\
+	  .show()
+	
+	''' 
+	Usuario más reciente 
+	'''
+	
+	df.sort("CreationDate", ascending=True)\
+	  .limit(1)\
+	  .show()
+	\end{minted}
+	
+	Estas consultas obtienen el usuario más antiguo y más reciente, respectivamente. La consulta ordena descendentemente (ascendentemente) la columna \texttt{CreationDate}, se selecciona la primera fila y se muestra de forma tabular.\\
+	
+	Notar que esta consulta sólo es válida debido al formato de la fecha. Si la columna tuviera otro formato deberíamos haber hecho uso de la función \texttt{date\_format}.  
+	
+	\item El usuario más joven y el más viejo (de los que han indicado una edad válida en el campo \texttt{Age}).\\
+	
+	La consulta es la siguiente:
+	
+	\begin{minted}{python}
+	''' Importamos las funciones `max` y `min` '''
+	from pyspark.sql.functions import min, max
+	
+	''' 
+	Calculamos la edad máxima y mínima de la columna `Age` 
+	'''
+	
+	ages = df.select(min("Age").alias("min"), \
+       max("Age").alias("max")).collect()
+	\end{minted}
+	
+	La consulta devuelve 
+	
+	\begin{verbatim}
+	[Row(min=14, max=95)]
+	\end{verbatim}
+	
+	Es decir, la edad mínima es 14 y la máxima es 95.\\
+	
+	Para conocer la información de los usuarios que tienen estas edades, hacemos la siguiente consulta:
+	
+	\begin{minted}{python}
+	''' 
+	Usuarios con la edad mínima guardada 
+	en la variable `ages` 
+	'''
+	df.filter(df.Age == ages[0].min).show()
+	
+	''' 
+	Usuarios con la edad máxima guardada 
+	en la variable `ages` 
+	'''
+	df.filter(df.Age == ages[0].max).show()
+	\end{minted}
+	
+	Notar que haciendo estas consultas, obtenemos dos DataFrames. Si quisiéramos mostrar toda la información en un mismo DataFrame, podríamos hacer la siguiente consulta:
+	
+	\begin{minted}{python}
+	df.select("*")\
+	  .where(
+	    (df.Age == df.select(min("Age")\
+	                 .alias("min"))\
+	                 .collect()[0].min) | \ 
+	    (df.Age == df.select(max("Age")\
+	                 .alias("max"))\
+	                 .collect()[0].max))\
+	  .orderBy("Age")\
+	  .show()
+	\end{minted}
+	
+	La consulta anterior selecciona todas las columnas, y filtra por edad máxima y mínima (seleccionando el valor máximo y mínimo de esta, y comparándola con la columna \texttt{Age} del DataFrame), y se ordena el DataFrame por edad, de forma ascendente.\\
+	
+	La consulta muestra los usuarios que tienen la edad mínima o máxima y se muestra de forma tabular. La Tabla~\ref{tbl:menos_edad} muestran a los usuarios más jóvenes y viejos.\\  
+\end{enumerate}
+
+
+\begin{landscape}
+\tiny 
+\setlength\LTleft{0pt}
+\setlength\LTright{0pt} 
+\begin{center}
+\begin{longtable}{@{\extracolsep{\fill}}*{11}{c}}
+\caption{Usuarios más antiguos y recientes}\\
+\label{tbl:mas_antiguo}\\
+\hline
+\textbf{AccountId} & \textbf{Age} & \textbf{CreationDate}   & \textbf{DisplayName} & \textbf{DownVotes} & \textbf{Id} & \textbf{LastAccessDate} & \textbf{Location}       & \textbf{Reputation} & \textbf{UpVotes} & \textbf{Views} \\
+\hline
+\endfirsthead
+
+\multicolumn{4}{c}%
+{\tablename\ \thetable\ -- \textit{Continuación de la página anterior}} \\
+\hline
+\textbf{AccountId} & \textbf{Age} & \textbf{CreationDate}   & \textbf{DisplayName} & \textbf{DownVotes} & \textbf{Id} & \textbf{LastAccessDate} & \textbf{Location}       & \textbf{Reputation} & \textbf{UpVotes} & \textbf{Views} \\
+\hline
+\endhead
+\multicolumn{11}{c}%
+					{\tablename\ \thetable\ -- \textit{Continúa de la página anterior}} \\
+					\hline
+					\textbf{AccountId} & \textbf{Age} & \textbf{CreationDate}   & \textbf{DisplayName} & \textbf{DownVotes} & \textbf{Id} & \textbf{LastAccessDate} & \textbf{Location}       & \textbf{Reputation} & \textbf{UpVotes} & \textbf{Views} \\
+					\hline
+					\endhead
+					\hline \multicolumn{11}{r}{\textit{Continúa en la página siguiente}} \\
+					\endfoot
+					\hline
+					\endlastfoot
+
+
+-1        & null & 2011-01-11T19:19:36.483 & Community             & 3953      & -1    & 2011-01-11T19:19:36.483 & on the server farm               & 1          & 2587    & 0     \\
 			2         & 38   & 2011-01-11T19:50:40.620 & Geoff Dalgas          & 0         & 2     & 2015-02-05T00:03:28.030 & Corvallis, OR                    & 101        & 1       & 21    \\
 			7598      & 30   & 2011-01-11T19:55:41.460 & Nick Craver           & 0         & 3     & 2015-03-01T13:49:49.173 & Winston-Salem, NC                & 101        & 3       & 10    \\
 			1998      & 29   & 2011-01-11T20:17:01.887 & Emmett                & 0         & 4     & 2013-05-06T20:52:29.970 & San Francisco, CA                & 101        & 0       & 7     \\
@@ -386,74 +522,45 @@ A continuación, resolveremos una serie de consultas sobre el fichero XML.
 			4638988   & null & 2014-06-20T08:25:45.527 & 1loudninja            & 0         & 28490 & 2014-06-20T08:25:45.527 & null                             & 1          & 0       & 1     \\
 			442769    & 39   & 2014-06-20T09:03:53.423 & roel                  & 0         & 28491 & 2014-06-27T13:52:07.070 & Aalst, Belgium                   & 101        & 0       & 0     \\
 			92717     & null & 2014-06-20T10:32:55.000 & FPC                   & 0         & 28492 & 2015-01-20T07:25:23.977 & null                             & 101        & 2       & 0     \\
-			4529331   & null & 2014-06-20T12:01:52.360 & ambient\_memory       & 0         & 28494 & 2014-06-20T12:01:52.360 & New York, United States          & 1          & 0       & 0     \\ \bottomrule
-			\end{tabular}
-		}
-	\end{table}
-	
-	Notar que de esta manera obtenemos los usuarios con fecha  mínima y máxima de acuerdo al día, mes y año. Si quisiéramos obtener los usuarios más recientes o antiguos hasta los milisegundos podríamos hacer uso de la siguientes consultas: 
-	
-	\begin{verbatim}
-	''' Usuario más antiguo '''
-	df.sort("CreationDate", ascending=False).limit(1).show()
-	
-	''' Usuario más reciente '''
-	df.sort("CreationDate", ascending=True).limit(1).show()
-	\end{verbatim}
-	
-	Estas consultas obtienen el usuario más antiguo y más reciente, respectivamente. La consulta ordena descendentemente (ascendentemente) la columna \texttt{CreationDate}, se selecciona la primera fila y se muestra de forma tabular.\\
-	
-	Notar que esta consulta sólo es válida debido al formato de la fecha. Si la columna tuviera otro formato deberíamos haber hecho uso de la función \texttt{date\_format}.  
-	
-	\item El usuario más joven y el más viejo (de los que han indicado una edad válida en el campo \texttt{Age}).\\
-	
-	La consulta es la siguiente:
-	
-	\begin{verbatim}
-	''' Importamos las funciones `max` y `min` '''
-	from pyspark.sql.functions import min, max
-	
-	''' Calculamos la edad máxima y mínima de la columna `Age` '''
-	ages = df.select(min("Age").alias("min"), max("Age").alias("max")).collect()
-	\end{verbatim}
-	
-	La consulta devuelve 
-	
-	\begin{verbatim}
-	[Row(min=14, max=95)]
-	\end{verbatim}
-	
-	Es decir, la edad mínima es 14 y la máxima es 95.\\
-	
-	Para conocer la información de los usuarios que tienen estas edades, hacemos la siguiente consulta:
-	
-	\begin{verbatim}
-	''' Usuarios con la edad mínima guardada en la variable `ages` '''
-	df.filter(df.Age == ages[0].min).show()
-	
-	''' Usuarios con la edad máxima guardada en la variable `ages` '''
-	df.filter(df.Age == ages[0].max).show()
-	\end{verbatim}
-	
-	Notar que haciendo estas consultas, obtenemos dos DataFrames. Si quisiéramos mostrar toda la información en un mismo DataFrame, podríamos hacer la siguiente consulta:
-	
-	\begin{verbatim}
-	df.select("*").where((df.Age == df.select(min("Age").alias("min")).collect()[0].min) | (df.Age == df.select(max("Age").alias("max")).collect()[0].max)).orderBy("Age").show()
-	\end{verbatim}
-	
-	La consulta anterior selecciona todas las columnas, y filtra por edad máxima y mínima (seleccionando el valor máximo y mínimo de esta, y comparándola con la columna \texttt{Age} del DataFrame), y se ordena el DataFrame por edad, de forma ascendente.\\
-	
-	La consulta muestra los usuarios que tienen la edad mínima o máxima y se muestra de forma tabular. La Tabla~\ref{tbl:menos_edad} muestran a los usuarios más jóvenes y viejos.\\  
-	
-	\begin{table}[htbp!]
-		\centering
-		\caption{Usuarios más jóvenes y viejos}
-		\label{tbl:menos_edad}
-		\resizebox{\textwidth}{!}{%
-			\begin{tabular}{@{}ccccccccccc@{}}
-			\toprule
-			\textbf{AccountId} & \textbf{Age} & \textbf{CreationDate}   & \textbf{DisplayName} & \textbf{DownVotes} & \textbf{Id} & \textbf{LastAccessDate} & \textbf{Location}       & \textbf{Reputation} & \textbf{UpVotes} & \textbf{Views} \\ \midrule
-			2178726            & 14           & 2013-05-01T20:06:21.567 & danilka1             & 0                  & 14208       & 2013-05-01T20:06:21.567 & planet earth            & 101                 & 0                & 0              \\
+			4529331   & null & 2014-06-20T12:01:52.360 & ambient\_memory       & 0         & 28494 & 2014-06-20T12:01:52.360 & New York, United States          & 1          & 0       & 0     \\
+\end{longtable}
+\end{center}
+\end{landscape}
+
+
+
+\begin{landscape}
+\tiny 
+\setlength\LTleft{0pt}
+\setlength\LTright{0pt} 
+\begin{center}
+\begin{longtable}{@{\extracolsep{\fill}}*{11}{c}}
+\caption{Usuarios más jóvenes y viejos}\\
+\label{tbl:menos_edad}\\
+\hline
+\textbf{AccountId} & \textbf{Age} & \textbf{CreationDate}   & \textbf{DisplayName} & \textbf{DownVotes} & \textbf{Id} & \textbf{LastAccessDate} & \textbf{Location}       & \textbf{Reputation} & \textbf{UpVotes} & \textbf{Views} \\
+\hline
+\endfirsthead
+
+\multicolumn{4}{c}%
+{\tablename\ \thetable\ -- \textit{Continuación de la página anterior}} \\
+\hline
+\textbf{AccountId} & \textbf{Age} & \textbf{CreationDate}   & \textbf{DisplayName} & \textbf{DownVotes} & \textbf{Id} & \textbf{LastAccessDate} & \textbf{Location}       & \textbf{Reputation} & \textbf{UpVotes} & \textbf{Views} \\
+\hline
+\endhead
+\multicolumn{11}{c}%
+					{\tablename\ \thetable\ -- \textit{Continúa de la página anterior}} \\
+					\hline
+					\textbf{AccountId} & \textbf{Age} & \textbf{CreationDate}   & \textbf{DisplayName} & \textbf{DownVotes} & \textbf{Id} & \textbf{LastAccessDate} & \textbf{Location}       & \textbf{Reputation} & \textbf{UpVotes} & \textbf{Views} \\
+					\hline
+					\endhead
+					\hline \multicolumn{11}{r}{\textit{Continúa en la página siguiente}} \\
+					\endfoot
+					\hline
+					\endlastfoot
+
+
+	2178726            & 14           & 2013-05-01T20:06:21.567 & danilka1             & 0                  & 14208       & 2013-05-01T20:06:21.567 & planet earth            & 101                 & 0                & 0              \\
 			198592             & 14           & 2013-08-29T15:11:50.853 & Ramchandra Apte      & 0                  & 16999       & 2014-12-24T13:08:05.003 & Bangalore, India        & 103                 & 9                & 3              \\
 			2913               & 95           & 2011-01-19T21:58:59.947 & bill weaver          & 0                  & 367         & 2011-02-13T13:03:54.283 & United States           & 101                 & 2                & 0              \\
 			9606               & 95           & 2011-03-20T00:47:48.647 & Mark Bessey          & 1                  & 1266        & 2015-03-04T22:20:25.507 & California              & 1723                & 78               & 31             \\
@@ -491,22 +598,21 @@ A continuación, resolveremos una serie de consultas sobre el fichero XML.
 			258794             & 95           & 2014-04-14T14:27:14.247 & TankorSmash          & 0                  & 25034       & 2015-03-06T23:08:36.217 & Astoria                 & 113                 & 2                & 4              \\
 			26790              & 95           & 2014-04-21T19:53:31.567 & THE DOCTOR           & 0                  & 25315       & 2014-12-12T23:52:26.350 & Gallifrey               & 163                 & 2                & 4              \\
 			1655211            & 95           & 2014-05-06T02:18:25.683 & Chipperyman          & 0                  & 25966       & 2015-01-02T20:35:13.137 & United States           & 101                 & 1                & 1              \\
-			118544             & 95           & 2014-06-17T03:02:42.240 & DarcyThomas          & 0                  & 28386       & 2015-03-07T21:16:47.060 & Wellington, New Zealand & 101                 & 1                & 0              \\ \bottomrule
-			\end{tabular}%
-		}
-	\end{table}
-	
-	
-\end{enumerate}
+			118544             & 95           & 2014-06-17T03:02:42.240 & DarcyThomas          & 0                  & 28386       & 2015-03-07T21:16:47.060 & Wellington, New Zealand & 101                 & 1                & 0              \\
+\end{longtable}
+\end{center}
+\end{landscape}
+
 \section{Conclusiones}
+
+En esta práctica hemos aprendido cómo leer archivos XML y realizar distintas consultas sobre estos datos, usando la DataFrame API para Spark con Python. Hemos visto la sencillez de esta API, que permite realizar multitud de operaciones sobre los DataFrames de una forma muy sencilla e intuitiva, lo que permite realizar consultas muy potentes en muy pocas líneas de código, que a su vez permite ahorrar mucho tiempo tanto en escritura como en mantenimiento del código.
 
 \newpage
 
 \section{Código Python}
 
-\begin{verbatim}
+\begin{minted}{python}
 
-\end{verbatim}
-
+\end{minted}
 
 \end{document} 

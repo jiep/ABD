@@ -67,7 +67,7 @@ En esta práctica final resolveremos una serie de cuestiones relativas a los usu
 
 El archivo \texttt{users.xml} contiene información sobre el perfil de un grupo del total de usuarios de la comunidad que han participado en ella, hasta marzo de 2015.\\
 
-Utilizaremos Apache Spark para realizar el análisis de este archivo, utilizando un DataFrames.
+Utilizaremos Apache Spark para realizar el análisis de este archivo, utilizando DataFrames.
 
 \section{Carga de los datos}
 
@@ -78,11 +78,11 @@ df = sqlContext.read.format('com.databricks.spark.xml')\
                .options(rowTag='row').load('users.xml')
 \end{minted}
 
-Este creará un DataFrame a partir del fichero \texttt{users.xml}, que se leerá como archivo \texttt{xml}, y se guardará los hijos de un elemento \texttt{row} como una columna, quedando como una tabla.
+Este comando creará un DataFrame a partir del fichero \texttt{users.xml}, que se leerá como archivo \texttt{xml}, y guardará los hijos de un elemento \texttt{row} como una columna, quedando finalmente como una tabla.
 
 \section{Ejercicio 1}
 
-Inspeccionamos las primeras filas del archivo para ver cuáles son los elementos de los que consta cada uno de ellos.
+Inspeccionamos las primeras filas del archivo para ver cuáles son los elementos de los que consta el fichero.
 
 \usemintedstyle{friendly}
 \begin{minted}{xml}
@@ -116,15 +116,15 @@ Inspeccionamos las primeras filas del archivo para ver cuáles son los elementos
 </users>
 \end{minted}
 
-Observamos que tenemos 11 elementos en cada fila:
+Observamos que cada elemento \texttt{row} consta de 11 elementos:
 
 \begin{itemize}
-	\item AccountId: Id de la cuenta
+	\item AccountId: id de la cuenta
 	\item Age: edad del usuario
 	\item CreationDate: fecha de creación de la cuenta
 	\item DisplayName: nombre de usuario
 	\item DownVotes: votos a favor
-	\item Id: Id de usuario
+	\item Id: id de usuario
 	\item LastAccessDate: fecha del último acceso
 	\item Location: localización
 	\item Reputation: puntos de reputación
@@ -155,9 +155,9 @@ root
   |-- Views: long (nullable = true)
 \end{verbatim}
 
-Además de las columnas, este comando nos devuelve el tipo de cada variable.\\
+Además de las columnas, este comando nos devuelve el tipo de cada variable, y si esa columna contener nulos o no.\\
 
-Si queremos ver el contenido del fichero, usamos el comando, que muestra las 10 primeras filas del fichero.
+Si queremos ver el contenido del fichero (en forma tabular), usamos el siguiente comando, que muestra las 10 primeras filas del fichero.
 
 \begin{minted}{python}
 df.show(10)
@@ -191,7 +191,7 @@ El comando devuelve la Tabla~\ref{tbl:head}.\\
 A continuación, resolveremos una serie de consultas sobre el fichero XML.
 
 \begin{enumerate}
-	\item Número total de registros de usuarios en el fichero.
+	\item \textbf{Número total de registros de usuarios en el fichero}.
 	
 	La consulta que realizamos es la siguiente:
 	
@@ -202,7 +202,7 @@ A continuación, resolveremos una serie de consultas sobre el fichero XML.
 	
 	La consulta devuelve 20333. Es decir, tenemos que el fichero tiene 20333 usuarios.
 	
-	\item Todos los datos disponibles sobre el usuario con \texttt{DisplayName} igual a \texttt{ambient\_memory}.
+	\item \textbf{Todos los datos disponibles sobre el usuario con \texttt{DisplayName} igual a \texttt{ambient\_memory}}.
 	
 	La consulta que realizamos es la siguiente:
 	
@@ -211,7 +211,7 @@ A continuación, resolveremos una serie de consultas sobre el fichero XML.
 	  .show()
 	\end{minted}
 	
-	La consulta busca las filas que tienen \texttt{ambient\_memory} como \texttt{DisplayName} y mostramos el resultado en forma tabular. La Tabla~\ref{tbl:ambient_memory} muestra los resultados.
+	La consulta busca las filas que tienen \texttt{ambient\_memory} como \texttt{DisplayName} y muestra el resultado en forma tabular. La Tabla~\ref{tbl:ambient_memory} muestra los resultados.
 	
 	\begin{table}[htbp!]
 		\centering
@@ -226,7 +226,7 @@ A continuación, resolveremos una serie de consultas sobre el fichero XML.
 		}
 	\end{table}
 	
-	\item Los 10 usuarios con mayor reputación.\\
+	\item \textbf{Los 10 usuarios con mayor reputación}.\\
 	
 	La consulta es la siguiente:
 	
@@ -268,16 +268,16 @@ A continuación, resolveremos una serie de consultas sobre el fichero XML.
 		}
 	\end{table}
 		
-	\item Los usuarios con la fecha de creación más antigua y la más reciente, respectivamente.\\
+	\item \textbf{Los usuarios con la fecha de creación más antigua y la más reciente, respectivamente}.\\
 	
 	La consulta es la siguiente:
 	
 	\begin{minted}{python}
 	''' 
-	Importamos la función to_date 
+	Necesario para usar la función to_date, max y min
 	'''
 	
-	from pyspark.sql.functions import to_date
+	from pyspark.sql.functions import *
 	
 	df.select("*")\
 	  .where((to_date(df.CreationDate) ==    
@@ -299,7 +299,7 @@ A continuación, resolveremos una serie de consultas sobre el fichero XML.
 	
 	La Tabla~\ref{tbl:mas_antiguo} muestra los usuarios con fecha de creación de su cuenta más antigua y más reciente.\\
 	
-	Notar que de esta manera obtenemos los usuarios con fecha  mínima y máxima de acuerdo al día, mes y año. Si quisiéramos obtener los usuarios más recientes o antiguos hasta los milisegundos podríamos hacer uso de la siguientes consultas: 
+	Notar que de esta manera obtenemos los usuarios con fecha  mínima y máxima de acuerdo al día, mes y año. Si quisiéramos obtener los usuarios más recientes o antiguos hasta los milisegundos podríamos hacer uso de las siguientes consultas: 
 	
 	\begin{minted}{python}
 	''' 
@@ -323,7 +323,7 @@ A continuación, resolveremos una serie de consultas sobre el fichero XML.
 	
 	Notar que esta consulta sólo es válida debido al formato de la fecha. Si la columna tuviera otro formato deberíamos haber hecho uso de la función \texttt{date\_format}.  
 	
-	\item El usuario más joven y el más viejo (de los que han indicado una edad válida en el campo \texttt{Age}).\\
+	\item \textbf{El usuario más joven y el más viejo (de los que han indicado una edad válida en el campo \texttt{Age})}.\\
 	
 	La consulta es la siguiente:
 	
@@ -380,7 +380,7 @@ A continuación, resolveremos una serie de consultas sobre el fichero XML.
 	
 	La consulta anterior selecciona todas las columnas, y filtra por edad máxima y mínima (seleccionando el valor máximo y mínimo de esta, y comparándola con la columna \texttt{Age} del DataFrame), y se ordena el DataFrame por edad, de forma ascendente.\\
 	
-	La consulta muestra los usuarios que tienen la edad mínima o máxima y se muestra de forma tabular. La Tabla~\ref{tbl:menos_edad} muestran a los usuarios más jóvenes y viejos.\\  
+	 La Tabla~\ref{tbl:menos_edad} muestra los resultados de la consulta anterior.\\  
 \end{enumerate}
 
 
